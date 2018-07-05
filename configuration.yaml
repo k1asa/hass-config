@@ -1,0 +1,341 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: hassio
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret time_zone
+  # Customization file
+  customize: !include customize.yaml
+  
+  whitelist_external_dirs:
+
+http:
+  api_password: !secret http_password
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+  base_url: !secret base_url
+  ip_ban_enabled: true
+  login_attempts_threshold: 7
+
+###########################################
+# Core Components
+###########################################
+frontend:
+config:
+zeroconf:
+
+###########################################
+# Simple Components
+###########################################
+
+###########################################
+# Core Components
+###########################################
+
+###########################################
+# Includes
+###########################################
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+###########################################
+# Third Party Platforms
+###########################################
+
+# Show links to resources in log and frontend
+#introduction:
+
+zone:
+  name: Home
+  latitude: !secret latitude_home
+  longitude: !secret longitude_home
+  radius: 100
+  icon: mdi:home
+  
+zone 2:
+  name: office_k
+  latitude: !secret latitude_office_k
+  longitude: !secret longitude_office_k
+  radius: 200
+  icon: mdi:briefcase
+
+zone 3:
+  name: office_a
+  latitude: !secret latitude_office_a
+  longitude: !secret longitude_office_a
+  radius: 200
+  icon: mdi:office-building
+
+zone 4:
+  name: Ikuta
+  latitude: !secret latitude_ikuta
+  longitude: !secret longitude_ikuta
+  radius: 100
+  icon: mdi:train
+
+
+
+
+
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  include_used_components: true
+
+device_tracker:
+  - platform: google_maps
+    username: !secret google_account_k1
+    password: !secret google_accountpw_k1
+
+# Discover some devices automatically
+discovery:
+  #enable:
+  #  - homekit
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+  exclude:
+    domains:
+      - automation
+      - weblink
+      - updater
+      - configurator
+      - group
+    entities:
+      - switch.bedroom_switch
+      - sensor.sonytabletp_battery_level_2
+      - sensor.sonytabletp_battery_state_2
+      - sensor.ayano0720_battery_level
+      - sensor.ayano0720_battery_state
+      - sensor.pihole_ads_blocked_today
+      - sensor.since_last_boot
+      
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Apple Homekit
+homekit:
+
+# Track the sun
+sun:
+
+# Yahoo weather
+weather:
+  - platform: yweather
+
+# Lock
+lock:
+  - platform: sesame
+    email: !secret sesame_id
+    password: !secret sesame_pass
+
+# Weather prediction
+sensor:
+    - platform: api_streams
+    - platform: version
+    - platform: systemmonitor
+      resources:
+        - type: memory_use_percent
+        - type: processor_use
+    - platform: uptime
+    - platform: yr
+    - platform: pi_hole
+    - platform: bme280
+      name: Ambient
+      i2c_address: 0x76
+      operation_mode: 2  # forced mode
+      time_standby: 5
+      oversampling_temperature: 4
+      oversampling_pressure: 4
+      oversampling_humidity: 4
+      delta_temperature: -0.5
+      monitored_conditions:
+        - temperature
+        - humidity
+        - pressure
+      scan_interval: 180
+    - platform: template
+      sensors:
+        ay_lastupdate:
+          friendly_name: "lastupdate"
+          value_template: "{{ as_timestamp(states.device_tracker.ay_phone.last_updated )|timestamp_custom('%Y-%m-%d %H:%M:%S') }}"
+
+    - platform: template
+      sensors:
+        k1_lastupdate:
+          friendly_name: "lastupdate"
+          value_template: "{{ as_timestamp(states.device_tracker.k1_phone.last_updated )|timestamp_custom('%Y-%m-%d %H:%M:%S') }}"
+
+    ###########################################
+    # Sun & Moon Sensors
+    ###########################################
+    - platform: template
+      sensors:
+        day_night:
+          friendly_name: 'Day/Night'
+          value_template: '{% if is_state("sun.sun", "above_horizon") %}Day{% else %}Night{% endif %}'
+          icon_template: '{% if is_state("sun.sun", "above_horizon") %}mdi:weather-sunny{% else %}mdi:weather-night{% endif %}'
+
+    - platform: template
+      sensors:
+        solar_angle:
+          value_template: '{{ states.sun.sun.attributes.elevation }}'
+          friendly_name: 'Solar Angle'
+          unit_of_measurement: 'degrees'
+        sunrise:
+          value_template: '{{ ((as_timestamp(states.sun.sun.attributes.next_rising)) | timestamp_local) [11:16] }} am'
+          friendly_name: 'Sunrise'
+        sunset:
+          value_template: '{{ ((as_timestamp(states.sun.sun.attributes.next_setting)-(43200)) | timestamp_local) [11:16] }} pm'
+          friendly_name: 'Sunset'
+    - platform: speedtest
+      server_id: 6087
+      hour:
+        - 0
+        - 3
+        - 6
+        - 9
+        - 12
+        - 15
+        - 18
+        - 21
+
+      monitored_conditions:
+        - ping
+        - download
+        - upload
+    
+    - platform: moon
+    
+    - platform: season
+      type: astronomical
+    
+    - platform: template
+      sensors:
+        season_template:
+          friendly_name: "Season"
+          value_template: >-
+            {%- if is_state("sensor.season", "spring") %}
+              Spring
+            {%- elif is_state("sensor.season", "summer") %}
+              Summer
+            {%- elif is_state("sensor.season", "autumn") %}
+              Autumn
+            {%- elif is_state("sensor.season", "winter") %}
+              Winter
+            {% else %}
+              None
+            {% endif %}
+          icon_template: >-
+            {%- if is_state("sensor.season_template", "Spring") %}
+              mdi:weather-sunset
+            {%- elif is_state("sensor.season_template", "Summer") %}
+              mdi:weather-sunny
+            {%- elif is_state("sensor.season_template", "Autumn") %}
+              mdi:leaf
+            {%- elif is_state("sensor.season_template", "Winter") %}
+              mdi:weather-snowy
+            {% else %}
+              mdi:weather-snowy-rainy
+            {% endif %}
+
+
+light:
+  - platform: nanoleaf_aurora
+    host: 192.168.3.10
+    token: !secret aurora_token
+
+switch:
+  - platform: mqtt
+    name: "Hot Water"
+    state_topic: "stat/sonoff1/POWER"
+    command_topic: "cmnd/sonoff1/POWER"
+    availability_topic: "tele/sonoff1/LWT"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    retain: false
+  - platform: wake_on_lan
+    name: 'Red-Astray'
+    host: 192.168.3.3
+    mac_address: "40-8D-5C-53-16-3A"
+    turn_off: 
+      service: script.addon_rpcshutdown_redastray
+
+media_player:
+#  - platform: ps4
+#    host: 192.168.3.9
+  - platform: braviatv_psk
+    name: Bravia
+    host: 192.168.3.8
+    psk: sony
+    mac: a8:6b:ad:1b:eb:07
+    amp: True
+    android: True
+    #sourcefilter:
+    #  - ' HD'
+    #  - HDMI
+
+# Text to speech
+tts:
+  - platform: google
+    language: 'ja'
+
+# Camera
+ffmpeg:
+
+camera:
+    - platform: ffmpeg
+      input: /dev/video0
+
+
+# mqtt
+mqtt:
+
+# Cloud
+cloud:
+
+wake_on_lan:
+
+
+# iOS Notification
+ios:
+
+notify:
+  - platform: ios
+  - platform: pushbullet
+    api_key: !secret pushbullet_key
+    name: pushbullet
+  - platform: nfandroidtv
+    name: Bravia
+    host: 192.168.3.8
+  - platform: prowl
+    name: prowl
+    api_key: !secret prowl_key
+
+    
+ifttt:
+  key: !secret ifttt_key
+
+

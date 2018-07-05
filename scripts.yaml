@@ -1,0 +1,7 @@
+addon_rpcshutdown_redastray:
+  sequence:
+  - data:
+      addon: core_rpc_shutdown
+      input: red-astray
+    service: hassio.addon_stdin
+  alias: addon_rpcshutdown_redastray

@@ -1,0 +1,22 @@
+- alias: auto_notify_ay_ikuta
+  trigger:
+    platform: state
+    entity_id: device_tracker.k1_phone
+    from: 'away'
+    to: 'ikuta'
+  action:
+    service: notify.ios_ay_phone
+    data:
+      message: 'k1 is ikuta'
+
+- alias: auto_notify_k1_ikuta
+  trigger:
+    platform: state
+    entity_id: device_tracker.ay_phone
+    from: 'away'
+    to: 'ikuta'
+  action:
+    service: notify.ios_k1_phone
+    data:
+      message: 'ay is ikuta'
+
