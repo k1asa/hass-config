@@ -23,31 +23,11 @@ sensor.sonytabletp_battery_state:
   name:
   platform: ios
   unique_id: state_k1_phone
-sensor.sonytabletp_battery_state_2:
-  config_entry_id:
-  name:
-  platform: ios
-  unique_id: state_sonytabletp
 sensor.sonytabletp_battery_level:
   config_entry_id:
   name:
   platform: ios
   unique_id: level_k1_phone
-sensor.sonytabletp_battery_level_2:
-  config_entry_id:
-  name:
-  platform: ios
-  unique_id: level_sonytabletp
-sensor.ayano0720_battery_state:
-  config_entry_id:
-  name:
-  platform: ios
-  unique_id: state_ay phone
-sensor.ayano0720_battery_level:
-  config_entry_id:
-  name:
-  platform: ios
-  unique_id: level_ay phone
 sensor.ayano0720_battery_state_2:
   config_entry_id:
   name:
