@@ -1,0 +1,2 @@
+- platform: ffmpeg
+  input: /dev/video0

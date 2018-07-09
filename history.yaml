@@ -6,7 +6,9 @@
       - updater
       - configurator
       - group
+      - camera
     entities:
+      - script.addon_rpcshutdown_redastray
       - switch.bedroom_switch
       - sensor.sonytabletp_battery_level_2
       - sensor.sonytabletp_battery_state_2
@@ -14,3 +16,20 @@
       - sensor.ayano0720_battery_state
       - sensor.pihole_ads_blocked_today
       - sensor.since_last_boot
+      - sensor.current_version
+      - sensor.day_night
+      - sensor.moon
+      - sensor.season_template
+      - sensor.season
+      - sensor.sunrise
+      - sensor.sunset
+      - sun.sun
+      - sensor.yr_symbol
+      - sensor.pihole_ads_percentage_blocked_today
+      - sensor.pihole_dns_queries_cached
+      - sensor.pihole_dns_queries_forwarded
+      - sensor.pihole_dns_queries_today
+      - sensor.pihole_dns_unique_clients
+      - sensor.pihole_dns_unique_domains
+      - sensor.pihole_domains_blocked
+      - sensor.pihole_seen_clients

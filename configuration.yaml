@@ -26,77 +26,65 @@ http:
 ###########################################
 # Core Components
 ###########################################
-frontend:
 config:
+conversation:
+frontend:
+logbook:
 zeroconf:
+
+updater:
+  include_used_components: true
 
 ###########################################
 # Simple Components
 ###########################################
+cloud:
+ffmpeg:
+homekit:
+ios:
+map:
+mqtt:
+sun:
+wake_on_lan:
 
-###########################################
-# Core Components
-###########################################
+discovery:
+  #enable:
+  #  - homekit
+lock:
+  - platform: sesame
+    email: !secret sesame_id
+    password: !secret sesame_pass
+tts:
+  - platform: google
+    language: 'ja'
+weather:
+  - platform: yweather
 
 ###########################################
 # Includes
 ###########################################
-group: !include groups.yaml
 automation: !include automations.yaml
+camera: !include camera.yaml
+group: !include groups.yaml
+history: !include history.yaml
+media_player: !include media_player.yaml
+notify: !include notify.yaml
 script: !include scripts.yaml
 zone: !include zones.yaml
-history: !include history.yaml
+
 
 ###########################################
 # Third Party Platforms
 ###########################################
-
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
-updater:
-  # Optional, allows Home Assistant developers to focus on popular components.
-  include_used_components: true
+ifttt:
+  key: !secret ifttt_key
 
 device_tracker:
   - platform: google_maps
     username: !secret google_account_k1
     password: !secret google_accountpw_k1
 
-# Discover some devices automatically
-discovery:
-  #enable:
-  #  - homekit
 
-# Allows you to issue voice commands from the frontend in enabled browsers
-conversation:
-
-
-# View all events in a logbook
-logbook:
-
-# Enables a map showing the location of tracked devices
-map:
-
-# Apple Homekit
-homekit:
-
-# Track the sun
-sun:
-
-# Yahoo weather
-weather:
-  - platform: yweather
-
-# Lock
-lock:
-  - platform: sesame
-    email: !secret sesame_id
-    password: !secret sesame_pass
-
-# Weather prediction
 sensor:
     - platform: api_streams
     - platform: version
@@ -205,6 +193,39 @@ sensor:
             {% else %}
               mdi:weather-snowy-rainy
             {% endif %}
+    - platform: jsonrest
+      resource: https://api.nature.global/1/devices
+      name: nremo_json
+      headers:
+        Authorization: !secret nature_key
+        Content-Type: application/json
+        Accept: application/json
+      scan_interval: '00:30'
+      force_update: true
+    - platform: template
+      sensors:
+        nremo0_temp:
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name }}'
+          value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.te.val }}'
+          unit_of_measurement: "°C"
+        nremo0_humidity:
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name }}'
+          value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.hu.val }}'
+          unit_of_measurement: "%"
+        nremo0_ilmi:
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name }}'
+          value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.il.val }}'
+        nremo1_temp:
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name }}'
+          value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.te.val }}'
+          unit_of_measurement: "°C"
+        nremo1_humidity:
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name }}'
+          value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.hu.val }}'
+          unit_of_measurement: "%"
+        nremo1_ilmi:
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name }}'
+          value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.il.val }}'
 
 
 light:
@@ -230,60 +251,3 @@ switch:
     mac_address: "40-8D-5C-53-16-3A"
     turn_off: 
       service: script.addon_rpcshutdown_redastray
-
-media_player:
-#  - platform: ps4
-#    host: 192.168.3.9
-  - platform: braviatv_psk
-    name: Bravia
-    host: 192.168.3.8
-    psk: sony
-    mac: a8:6b:ad:1b:eb:07
-    amp: True
-    android: True
-    #sourcefilter:
-    #  - ' HD'
-    #  - HDMI
-
-# Text to speech
-tts:
-  - platform: google
-    language: 'ja'
-
-# Camera
-ffmpeg:
-
-camera:
-    - platform: ffmpeg
-      input: /dev/video0
-
-
-# mqtt
-mqtt:
-
-# Cloud
-cloud:
-
-wake_on_lan:
-
-
-# iOS Notification
-ios:
-
-notify:
-  - platform: ios
-  - platform: pushbullet
-    api_key: !secret pushbullet_key
-    name: pushbullet
-  - platform: nfandroidtv
-    name: Bravia
-    host: 192.168.3.8
-  - platform: prowl
-    name: prowl
-    api_key: !secret prowl_key
-
-    
-ifttt:
-  key: !secret ifttt_key
-
-

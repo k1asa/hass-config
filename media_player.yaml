@@ -1,0 +1,12 @@
+- platform: ps4
+  host: 192.168.3.9
+- platform: braviatv_psk
+  name: Bravia
+  host: 192.168.3.8
+  psk: sony
+  mac: a8:6b:ad:1b:eb:07
+  amp: True
+  android: True
+  #sourcefilter:
+  #  - ' HD'
+  #  - HDMI
