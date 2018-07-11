@@ -1,10 +1,9 @@
 *
 !*.yaml
-!.travis.yml
-!scenes
-!custom_components
-!groups_views
-!sensors
-!.gitignore
-secrets.yaml
-known_devices.yaml
+!/.travis.yml
+!/custom_components
+!/groups_views
+!/sensors
+!/.gitignore
+/secrets.yaml
+/known_devices.yaml
