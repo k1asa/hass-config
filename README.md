@@ -9,7 +9,7 @@ Home Assistant(Hass.io)の設定各ファイル
 日本の方にHA使っていただきたいから少しでも参考になればと思って公開。  
 
 ## 使用機器  
-- Raspberry Pi 3B
+- Raspberry Pi 3B (Raspbian Stretch)
     - BME280 i2Cセンサー  
     - Pi Camera
     - ビットトレードワン ADRSIR
