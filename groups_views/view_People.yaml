@@ -1,0 +1,8 @@
+People:
+    name: People
+    view: yes
+    icon: mdi:account-multiple
+    entities:
+      - group.presences
+      - group.k1_phone
+      - group.ay_phone

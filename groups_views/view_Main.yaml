@@ -1,0 +1,11 @@
+Main:
+    name: Main
+    view: yes
+    icon: mdi:home
+    entities:
+      - group.ambient_sensor
+      - group.presences
+      - light.aurora
+      - lock.sesamea
+      - switch.hot_water
+      - switch.redastray

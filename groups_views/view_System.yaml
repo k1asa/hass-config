@@ -1,0 +1,11 @@
+System:
+    name: "System"
+    icon: mdi:raspberrypi
+    view: yes
+    entities:
+      - group.system_status
+      - group.netspeed
+      - group.pi_hole_sensor
+      - group.all_scripts
+      - group.all_automations
+      - switch.redastray

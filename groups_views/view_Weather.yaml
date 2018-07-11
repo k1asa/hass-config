@@ -1,0 +1,7 @@
+Weather:
+    name: weather
+    view: yes
+    icon: mdi:weather-partlycloudy
+    entities:
+      - group.sun_moon
+      - weather.yweather
