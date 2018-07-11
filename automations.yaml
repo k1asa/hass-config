@@ -1,22 +1,117 @@
+
+###########################################
+# 駅に着いたらもう一方に通知
+###########################################
 - alias: auto_notify_k1_ikuta
+  initial_state: True
   trigger:
-    platform: state
+    platform: zone
     entity_id: device_tracker.k1_phone
-    from: 'away'
-    to: 'Ikuta'
+    zone: zone.ikuta
+    event: enter
   action:
     service: notify.ios_ay_phone
     data:
-      message: 'k1 is ikuta'
+      message: "k1が生田駅"
+  id: 56fee34f8d19478298ce85ce3fa44907
 
 - alias: auto_notify_ay_ikuta
+  initial_state: True
   trigger:
-    platform: state
+    platform: zone
     entity_id: device_tracker.ay_phone
-    from: 'away'
-    to: 'Ikuta'
+    zone: zone.ikuta
+    event: enter
   action:
     service: notify.ios_k1_phone
     data:
-      message: 'ay is ikuta'
+      message: "ayanoが生田駅"
+  id: bcb567724cfe408d950910f48b021d9b
 
+###########################################
+# 帰宅したらもう一方に通知
+###########################################
+- alias: auto_notify_k1_home
+  initial_state: True
+  trigger:
+    platform: zone
+    entity_id: device_tracker.k1_phone
+    zone: zone.home
+    event: enter
+  action:
+    service: notify.ios_ay_phone
+    data:
+      message: "k1が帰宅したよ"
+  id: '329241390802'
+
+- alias: auto_notify_ay_home
+  initial_state: True
+  trigger:
+    platform: zone
+    entity_id: device_tracker.ay_phone
+    zone: zone.home
+    event: enter
+  action:
+    service: notify.ios_k1_phone
+    data:
+      message: "ayanoが帰宅したよ"
+  id: '329241390802'
+
+###########################################
+# 平日+土曜に昼飯持参のための湯沸し
+###########################################
+- id: '1531186947510'
+  initial_state: True
+  alias: HotWater
+  trigger:
+  - at: 05:00:00
+    platform: time
+  condition:
+    condition: and
+    conditions: 
+      - condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: device_tracker.k1_phone
+            state: 'home'
+          - condition: state
+            entity_id: device_tracker.ay_phone
+            state: 'home'
+  action:
+  - service: switch.turn_on
+    data:
+      entity_id: switch.hot_water
+
+###########################################
+# HA起動時に接続済みのiOS端末にlocation更新催促
+###########################################
+- alias: Update IOS location on HA start
+  initial_state: True
+  id: '106962549528'
+  trigger:
+  - platform: homeassistant
+    event: start
+  action:
+    - service: notify.ios_ay_phone
+      data:
+        message: "request_location_update"
+    - delay: 00:00:01
+    - service: notify.ios_k1_phone
+      data:
+        message: "request_location_update"
+    - delay: 00:00:20
+    - service: notify.ios_ay_iphone
+      data:
+        message: "request_location_update"
+    - delay: 00:00:01
+    - service: notify.ios_k1_iphone
+      data:
+        message: "request_location_update"

@@ -1,3 +1,6 @@
+######################
+# media_playerコンポーネント
+######################
 - platform: ps4
   host: 192.168.3.9
 - platform: braviatv_psk

@@ -1,4 +1,14 @@
+######################
+# おおもとの設定ファイル。
+#  gitで公開したくない情報は !secret <key名> で隠蔽可能。
+#  →https://www.home-assistant.io/docs/configuration/secrets/
+######################
+
+
 homeassistant:
+######################
+# 基本セクション
+######################
   # Name of the location where Home Assistant is running
   name: hassio
   # Location required to calculate the time the sun rises and sets
@@ -15,6 +25,18 @@ homeassistant:
   
   whitelist_external_dirs:
 
+######################
+# HA管理画面の左フレームへショートカット作成
+######################
+panel_iframe:
+  mdiindex:
+    title: MDI Icon Index
+    icon: mdi:vector-square
+    url: https://cdn.rawgit.com/james-fry/home-assistant-mdi/efd95d7a/home-assistant-mdi.html
+
+######################
+# 管理画面設定
+######################
 http:
   api_password: !secret http_password
   ssl_certificate: /ssl/fullchain.pem
@@ -31,7 +53,6 @@ conversation:
 frontend:
 logbook:
 zeroconf:
-
 updater:
   include_used_components: true
 
@@ -62,10 +83,12 @@ weather:
 
 ###########################################
 # Includes
+#  include で他ファイルへ飛ばせる。
+#  include_dir_merge_named でフォルダ指定してすべてマージして読み込ませられる。
 ###########################################
 automation: !include automations.yaml
 camera: !include camera.yaml
-group: !include groups.yaml
+group: !include_dir_merge_named groups_views
 history: !include history.yaml
 media_player: !include media_player.yaml
 notify: !include notify.yaml
@@ -84,17 +107,44 @@ device_tracker:
     username: !secret google_account_k1
     password: !secret google_accountpw_k1
 
+###########################################
+# 未整理
+###########################################
+
 
 sensor:
+    ###########################################
+    # APIに何人ぶら下がってるか？
+    ###########################################
     - platform: api_streams
+    ###########################################
+    # version確認センサー
+    ###########################################
     - platform: version
+    ###########################################
+    # システムモニターセンサー
+    ###########################################
     - platform: systemmonitor
       resources:
         - type: memory_use_percent
         - type: processor_use
+        - type: disk_use_percent
+        - type: last_boot
+    ###########################################
+    # HAの起動時間センサー
+    ###########################################
     - platform: uptime
+    ###########################################
+    # YRウェザーのアイコン取得センサー
+    ###########################################
     - platform: yr
+    ###########################################
+    # pi_holeの広告ブロック数センサー
+    ###########################################
     - platform: pi_hole
+    ###########################################
+    # PiのGPIOにつないだI2C接続のbme280センサー
+    ###########################################
     - platform: bme280
       name: Ambient
       i2c_address: 0x76
@@ -109,6 +159,9 @@ sensor:
         - humidity
         - pressure
       scan_interval: 180
+    ###########################################
+    # device_trackerの属性値から引っ張る更新日時センサー
+    ###########################################
     - platform: template
       sensors:
         ay_lastupdate:
@@ -122,7 +175,7 @@ sensor:
           value_template: "{{ as_timestamp(states.device_tracker.k1_phone.last_updated )|timestamp_custom('%Y-%m-%d %H:%M:%S') }}"
 
     ###########################################
-    # Sun & Moon Sensors
+    # 日の出、日の入り算出センサー
     ###########################################
     - platform: template
       sensors:
@@ -143,6 +196,10 @@ sensor:
         sunset:
           value_template: '{{ ((as_timestamp(states.sun.sun.attributes.next_setting)-(43200)) | timestamp_local) [11:16] }} pm'
           friendly_name: 'Sunset'
+    ###########################################
+    # Speedtest.netでの速度計測を定期的に行い記録する。
+    #  混雑時間帯など把握できたらと思って設置
+    ###########################################
     - platform: speedtest
       server_id: 6087
       hour:
@@ -154,17 +211,24 @@ sensor:
         - 15
         - 18
         - 21
-
       monitored_conditions:
         - ping
         - download
         - upload
-    
+    ###########################################
+    # 月の満ち欠けセンサー
+    ###########################################
     - platform: moon
-    
+
+    ###########################################
+    # 「今は夏ですｷﾘｯ」って教えてくれるセンサー
+    ###########################################
     - platform: season
       type: astronomical
-    
+
+    ###########################################
+    # 「今は夏ですｷﾘｯ」って教えてくれるしアイコンも変わるセンサー
+    ###########################################
     - platform: template
       sensors:
         season_template:
@@ -193,6 +257,9 @@ sensor:
             {% else %}
               mdi:weather-snowy-rainy
             {% endif %}
+    ###########################################
+    # nature Remoから室温と湿度と照度センサー読み出し
+    ###########################################
     - platform: jsonrest
       resource: https://api.nature.global/1/devices
       name: nremo_json
@@ -200,40 +267,46 @@ sensor:
         Authorization: !secret nature_key
         Content-Type: application/json
         Accept: application/json
-      scan_interval: '00:30'
+      scan_interval: '00:15'
       force_update: true
     - platform: template
       sensors:
         nremo0_temp:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name }}'
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name|replace("remo-","") }} 室温'
           value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.te.val }}'
           unit_of_measurement: "°C"
         nremo0_humidity:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name }}'
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name|replace("remo-","") }} 湿度'
           value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.hu.val }}'
           unit_of_measurement: "%"
         nremo0_ilmi:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name }}'
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name|replace("remo-","") }} 照度'
           value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.il.val }}'
         nremo1_temp:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name }}'
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name|replace("remo-","") }} 室温'
           value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.te.val }}'
           unit_of_measurement: "°C"
         nremo1_humidity:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name }}'
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name|replace("remo-","") }} 湿度'
           value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.hu.val }}'
           unit_of_measurement: "%"
         nremo1_ilmi:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name }}'
+          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name|replace("remo-","") }} 照度'
           value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.il.val }}'
 
 
 light:
+    ###########################################
+    # Nanoleaf Aurora操作
+    ###########################################
   - platform: nanoleaf_aurora
     host: 192.168.3.10
     token: !secret aurora_token
 
 switch:
+    ###########################################
+    # MQTT経由のSonoff Basic
+    ###########################################
   - platform: mqtt
     name: "Hot Water"
     state_topic: "stat/sonoff1/POWER"
@@ -245,6 +318,10 @@ switch:
     payload_available: "Online"
     payload_not_available: "Offline"
     retain: false
+    ###########################################
+    # Windowsマシンのon/off
+    #  wake on lanで起動して、pingで生死確認して、RPCshutdownで終了
+    ###########################################
   - platform: wake_on_lan
     name: 'Red-Astray'
     host: 192.168.3.3

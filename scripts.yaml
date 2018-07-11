@@ -1,7 +1,11 @@
+###########################################
+# RPC add-onのサービスコール
+###########################################
 addon_rpcshutdown_redastray:
   sequence:
-  - data:
+  - alias: addon_rpcshutdown_redastray
+    service: hassio.addon_stdin
+    data:
       addon: core_rpc_shutdown
       input: red-astray
-    service: hassio.addon_stdin
-  alias: addon_rpcshutdown_redastray
+

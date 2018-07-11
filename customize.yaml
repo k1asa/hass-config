@@ -1,15 +1,51 @@
-#Hide K1phone_old
-sensor.sonytabletp_battery_level_2:
-    hidden: true
-sensor.sonytabletp_battery_state_2:
-    hidden: true
+######################
+# 各種センサーなどのアイコンや種別変更
+######################
 
-#Hide AYphone_old
-sensor.ayano0720_battery_level:
-    hidden: true
-sensor.ayano0720_battery_state:
-    hidden: true
+sensor.nremo0_humidity:
+  device_class: humidity
 
-#Hide bedroom_switch
-switch.bedroom_switch:
-    hidden: true
+sensor.nremo1_humidity:
+  device_class: humidity
+
+sensor.ambient_humidity:
+  device_class: humidity
+
+sensor.nremo0_ilmi:
+  device_class: illuminance
+
+sensor.nremo1_ilmi:
+  device_class: illuminance
+
+sensor.ambient_pressure:
+  icon: mdi:nature
+
+sensor.connected_clients:
+  icon: mdi:account-multiple
+
+sensor.sunrise:
+  icon: mdi:weather-sunset-up
+
+sensor.sunset:
+  icon: mdi:weather-sunset-down
+
+sensor.solar_angle:
+  icon: mdi:gauge
+
+sensor.current_version:
+  icon: mdi:desktop-tower
+
+sensor.ay_lastupdate:
+  icon: mdi:update
+
+sensor.k1_lastupdate:
+  icon: mdi:update
+
+sensor.nremo_json:
+  hidden: true
+ 
+group.all_scripts:
+  hidden: false
+
+group.all_automations:
+  hidden: false

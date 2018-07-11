@@ -1,2 +1,20 @@
-- platform: ffmpeg
-  input: /dev/video0
+######################
+# (停止)Pi Camera
+######################
+#- platform: ffmpeg
+#  input: /dev/video0
+
+######################
+# motion + motioneye を入れてそっちに動体検知を任せる
+######################
+- platform: mjpeg
+  name: "Living Cam"
+  mjpeg_url: http://localhost:8081
+  still_image_url: http://localhost:8765/picture/1/current/
+  username: !secret motion_id
+  password: !secret motion_pw
+  authentication: digest
+
+#- platform: mjpeg
+#  name: "雨雲レーダー"
+#     ⇒YahooLocation 系のAPI使って  職場と自宅の雨雲レーダー表示を目論見中
