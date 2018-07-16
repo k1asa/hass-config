@@ -1,0 +1,9 @@
+Sensor:
+    name: Sensors
+    view: yes
+    icon: mdi:gauge
+    entities:
+      - group.presences
+      - group.ambients
+      - group.nremo_living
+      - group.nremo_bed

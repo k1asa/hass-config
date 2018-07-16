@@ -10,7 +10,7 @@
       - updater
       - configurator
       - group
-      - camera
+#      - camera
       - script
       - sun
       
@@ -25,3 +25,10 @@
       - sensor.sunrise
       - sensor.sunset
       - sensor.yr_symbol
+      - sensor.last_boot
+      - sensor.uptime
+      - sensor.solar_angle
+      - sensor.connected_clients
+      - sensor.nremo_json
+      - camera.k1_map
+      - camera.ay_map

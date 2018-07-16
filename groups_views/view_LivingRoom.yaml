@@ -1,8 +1,0 @@
-###########################################
-# Living Room Tab
-###########################################
-Living_room:
-  view: yes
-  icon: mdi:sofa
-  name: "Living-Room"
-  entities: 

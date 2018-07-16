@@ -3,5 +3,6 @@ Weather:
     view: yes
     icon: mdi:weather-partlycloudy
     entities:
+      - sensor.yr_symbol
       - group.sun_moon
       - weather.yweather

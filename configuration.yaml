@@ -265,9 +265,7 @@ sensor:
       name: nremo_json
       headers:
         Authorization: !secret nature_key
-        Content-Type: application/json
-        Accept: application/json
-      scan_interval: '00:15'
+#      scan_interval: 15
       force_update: true
     - platform: template
       sensors:
@@ -304,9 +302,9 @@ light:
     token: !secret aurora_token
 
 switch:
-    ###########################################
-    # MQTT経由のSonoff Basic
-    ###########################################
+  ###########################################
+  # MQTT経由のSonoff Basic
+  ###########################################
   - platform: mqtt
     name: "Hot Water"
     state_topic: "stat/sonoff1/POWER"
@@ -318,13 +316,47 @@ switch:
     payload_available: "Online"
     payload_not_available: "Offline"
     retain: false
-    ###########################################
-    # Windowsマシンのon/off
-    #  wake on lanで起動して、pingで生死確認して、RPCshutdownで終了
-    ###########################################
+  ###########################################
+  # Windowsマシンのon/off
+  #  wake on lanで起動して、pingで生死確認して、RPCshutdownで終了
+  ###########################################
   - platform: wake_on_lan
     name: 'Red-Astray'
     host: 192.168.3.3
     mac_address: "40-8D-5C-53-16-3A"
     turn_off: 
       service: script.addon_rpcshutdown_redastray
+  ###########################################
+  # Remo経由のスイッチ(困惑中)
+  ###########################################
+#ダイニング電灯
+#curl -X POST "https://api.nature.global/1/signals/e50a704c-eee6-491a-bae8-d22463e48033/send" -H "Authorization: !secret nature_key"
+#オン
+#curl -X POST "https://api.nature.global/1/signals/6d5f7c3d-0d46-4cfe-8d10-7eb4a54bce44/send" -H "Authorization: !secret nature_key"
+#オフ
+#curl -X POST "https://api.nature.global/1/signals/6e5bb331-d2d4-4dd4-bb95-0be66d7493eb/send" -H "Authorization: !secret nature_key"
+#暗く
+#curl -X POST "https://api.nature.global/1/signals/f14ae2fa-52e4-4f97-80da-fcd74825d166/send" -H "Authorization: !secret nature_key"
+#常夜
+#
+#リビング電灯
+#curl -X POST "https://api.nature.global/1/signals/c19757dc-c00c-4ae2-9fc4-8582699e5933/send" -H "Authorization: !secret nature_key"
+#オン
+#curl -X POST "https://api.nature.global/1/signals/92fdaa22-4ee6-466b-a53e-eb9cbdf841e7/send" -H "Authorization: !secret nature_key"
+#オフ
+#curl -X POST "https://api.nature.global/1/signals/d81c8d20-ece1-4ac4-96ae-d09ce15c1ef2/send" -H "Authorization: !secret nature_key"
+#暗く
+#curl -X POST "https://api.nature.global/1/signals/0e9456e8-b5af-428d-a176-cdf47b93ed3a/send" -H "Authorization: !secret nature_key"
+#常夜
+#
+#ベッド電灯
+#curl -X POST "https://api.nature.global/1/signals/6613e90c-1b7a-4b4b-9311-de0254e29385/send" -H "Authorization: !secret nature_key"
+#オン
+#curl -X POST "https://api.nature.global/1/signals/c450f1f3-da26-4126-adf7-89f67dadcb90/send" -H "Authorization: !secret nature_key"
+#オフ
+#curl -X POST "https://api.nature.global/1/signals/59fd436a-7543-4272-ba20-84a412af4836/send" -H "Authorization: !secret nature_key"
+#暗く
+#curl -X POST "https://api.nature.global/1/signals/1bb5e949-c43a-4237-a577-71e02fb75b55/send" -H "Authorization: !secret nature_key"
+#常夜
+
+

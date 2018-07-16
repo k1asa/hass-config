@@ -41,9 +41,6 @@ sensor.ay_lastupdate:
 sensor.k1_lastupdate:
   icon: mdi:update
 
-sensor.nremo_json:
-  hidden: true
- 
 group.all_scripts:
   hidden: false
 

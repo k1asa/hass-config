@@ -5,7 +5,7 @@ System:
     entities:
       - group.system_status
       - group.netspeed
-      - group.pi_hole_sensor
       - group.all_scripts
       - group.all_automations
       - switch.redastray
+      - group.pi_hole

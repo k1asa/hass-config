@@ -1,4 +1,4 @@
-Main:
+default_view:
     name: Main
     view: yes
     icon: mdi:home
@@ -9,3 +9,8 @@ Main:
       - lock.sesamea
       - switch.hot_water
       - switch.redastray
+      - camera.living_cam
+      - media_player.bravia
+      - media_player._2
+      - media_player.mini_2
+      - media_player.mini

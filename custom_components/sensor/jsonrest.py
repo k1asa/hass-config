@@ -9,6 +9,7 @@ For more details about this platform, please refer to the documentation at
 https://home-assistant.io/components/sensor.rest/
 
 Modified to parse a JSON reply and store data as attributes
+
 """
 import logging
 
@@ -19,7 +20,7 @@ from requests.auth import HTTPBasicAuth, HTTPDigestAuth
 
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import (
-    CONF_PAYLOAD, CONF_NAME, CONF_VALUE_TEMPLATE, CONF_METHOD, CONF_RESOURCE,
+    CONF_PAYLOAD, CONF_NAME, CONF_FORCE_UPDATE, CONF_VALUE_TEMPLATE, CONF_METHOD, CONF_RESOURCE,
     CONF_UNIT_OF_MEASUREMENT, STATE_UNKNOWN, STATE_ON, CONF_VERIFY_SSL, CONF_USERNAME,
     CONF_PASSWORD, CONF_AUTHENTICATION, HTTP_BASIC_AUTHENTICATION,
     HTTP_DIGEST_AUTHENTICATION, CONF_HEADERS)
@@ -31,6 +32,7 @@ _LOGGER = logging.getLogger(__name__)
 DEFAULT_METHOD = 'GET'
 DEFAULT_NAME = 'JSON REST Sensor'
 DEFAULT_VERIFY_SSL = True
+DEFAULT_FORCE_UPDATE = False
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_RESOURCE): cv.url,
@@ -45,6 +47,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_USERNAME): cv.string,
     vol.Optional(CONF_VALUE_TEMPLATE): cv.template,
     vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
+    vol.Optional(CONF_FORCE_UPDATE, default=DEFAULT_FORCE_UPDATE): cv.boolean,
 })
 
 
@@ -60,6 +63,8 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     headers = config.get(CONF_HEADERS)
     unit = config.get(CONF_UNIT_OF_MEASUREMENT)
     value_template = config.get(CONF_VALUE_TEMPLATE)
+    force_update = config.get(CONF_FORCE_UPDATE)
+    
     if value_template is not None:
         value_template.hass = hass
 
@@ -77,13 +82,13 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
         _LOGGER.error("Unable to fetch REST data")
         return False
 
-    add_devices([JSONRestSensor(hass, rest, name, unit, value_template)])
+    add_devices([JSONRestSensor(hass, rest, name, unit, value_template, force_update)])
 
 
 class JSONRestSensor(Entity):
     """Implementation of a REST sensor."""
 
-    def __init__(self, hass, rest, name, unit_of_measurement, value_template):
+    def __init__(self, hass, rest, name, unit_of_measurement, value_template, force_update):
         """Initialize the REST sensor."""
         self._hass = hass
         self.rest = rest
@@ -92,6 +97,7 @@ class JSONRestSensor(Entity):
         self._state = STATE_UNKNOWN
         self._unit_of_measurement = unit_of_measurement
         self._value_template = value_template
+        self._force_update = force_update
         self.update()
 
     @property
@@ -108,6 +114,11 @@ class JSONRestSensor(Entity):
     def state(self):
         """Return the state of the device."""
         return self._state
+    
+    @property
+    def force_update(self):
+        """Force update."""
+        return self._force_update
     
     def update(self):
         """Get the latest data from REST API and update the state."""

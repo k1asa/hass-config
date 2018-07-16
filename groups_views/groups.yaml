@@ -28,7 +28,6 @@ presences:
 
 System_Status:
     name: "System Status"
-    view: no
     entities:
         - sensor.uptime
         - sensor.connected_clients
@@ -36,6 +35,7 @@ System_Status:
         - sensor.processor_use
         - sensor.memory_use_percent
         - sensor.since_last_boot
+        - sensor.last_boot
 
 Sun_Moon:
     name: "Sun & Moon"

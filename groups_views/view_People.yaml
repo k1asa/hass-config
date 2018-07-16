@@ -6,3 +6,5 @@ People:
       - group.presences
       - group.k1_phone
       - group.ay_phone
+      - camera.k1_map
+      - camera.ay_map
