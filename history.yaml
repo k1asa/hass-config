@@ -13,6 +13,7 @@
 #      - camera
       - script
       - sun
+      - history_graph
       
     entities:
       - sensor.pihole_ads_blocked_today
@@ -32,3 +33,7 @@
       - sensor.nremo_json
       - camera.k1_map
       - camera.ay_map
+      - sensor.yweather_temperature_max
+      - sensor.yweather_condition
+      - sensor.yweather_temperature_min
+      - sensor.yweather_wind_speed

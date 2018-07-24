@@ -14,3 +14,7 @@ default_view:
       - media_player._2
       - media_player.mini_2
       - media_player.mini
+      - light.living
+      - light.dining
+      - light.bed
+      - history_graph.lock

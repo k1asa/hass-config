@@ -6,3 +6,6 @@ Weather:
       - sensor.yr_symbol
       - group.sun_moon
       - weather.yweather
+      - weather.dark_sky
+      - weather.openweathermap
+      - group.Yweather

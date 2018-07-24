@@ -1,8 +1,56 @@
+###########################################
+# HA起動時にLINE通知
+###########################################
+- alias: HA is online
+  id: '658745877754'
+  initial_state: true
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - service: script.notify_line_log
+      data:
+        value1: 'HA is start'
+###########################################
+# office出たら通知
+###########################################
+- alias: auto_notify_k1_office
+  id: '47389743847874'
+  initial_state: True
+  trigger:
+    platform: zone
+    entity_id: device_tracker.k1_phone
+    zone: zone.office_k
+    event: leave
+  action:
+    - service: notify.ios_ay_phone
+      data:
+        message: "k1が職場を離脱"
+    - service: script.notify_line_mtg
+      data:
+        value1: 'k1が職場から離脱'
+        
+- alias: auto_notify_ay_office
+  id: '453947837978555'
+  initial_state: True
+  trigger:
+    platform: zone
+    entity_id: device_tracker.ay_phone
+    zone: zone.office_a
+    event: leave
+  action:
+    - service: notify.ios_k1_phone
+      data:
+        message: "ayが職場を離脱"
+    - service: script.notify_line_mtg
+      data:
+        value1: 'ayが職場を離脱'
 
 ###########################################
-# 駅に着いたらもう一方に通知
+# 駅に着いたらもう通知
 ###########################################
 - alias: auto_notify_k1_ikuta
+  id: '5186418276318273'
   initial_state: True
   trigger:
     platform: zone
@@ -10,11 +58,13 @@
     zone: zone.ikuta
     event: enter
   action:
-    service: notify.ios_ay_phone
-    data:
-      message: "k1が生田駅"
-  id: 56fee34f8d19478298ce85ce3fa44907
-
+    - service: notify.ios_ay_phone
+      data:
+        message: "k1が生田駅"
+    - service: script.notify_line_mtg
+      data:
+        value1: 'k1が生田駅'
+        
 - alias: auto_notify_ay_ikuta
   initial_state: True
   trigger:
@@ -23,10 +73,13 @@
     zone: zone.ikuta
     event: enter
   action:
-    service: notify.ios_k1_phone
-    data:
-      message: "ayanoが生田駅"
-  id: bcb567724cfe408d950910f48b021d9b
+    - service: notify.ios_k1_phone
+      data:
+        message: "ayが生田駅"
+    - service: script.notify_line_mtg
+      data:
+        value1: 'ayが生田駅'
+  id: 'bcb567724cfe408d950910f48b021d9b'
 
 ###########################################
 # 帰宅したらもう一方に通知
@@ -39,9 +92,12 @@
     zone: zone.home
     event: enter
   action:
-    service: notify.ios_ay_phone
-    data:
-      message: "k1が帰宅したよ"
+    - service: notify.ios_ay_phone
+      data:
+        message: "k1が帰宅したよ"
+    - service: script.notify_line_mtg
+      data:
+        value1: 'k1が帰宅'
   id: '329241390802'
 
 - alias: auto_notify_ay_home
@@ -52,9 +108,12 @@
     zone: zone.home
     event: enter
   action:
-    service: notify.ios_k1_phone
-    data:
-      message: "ayanoが帰宅したよ"
+    - service: notify.ios_k1_phone
+      data:
+        message: "ayが帰宅"
+    - service: script.notify_line_mtg
+      data:
+        value1: 'ayが生田駅'
   id: '329241390802'
 
 ###########################################
@@ -89,6 +148,16 @@
   - service: switch.turn_on
     data:
       entity_id: switch.hot_water
+  - service: script.notify_line_log
+    data:
+      value1: '湯沸しon'
+  - delay: 01:00:00
+  - service: switch.turn_off
+    data:
+      entity_id: switch.hot_water
+  - service: script.notify_line_log
+    data:
+      value1: '湯沸しoff'
 
 ###########################################
 # HA起動時に接続済みのiOS端末にlocation更新催促
@@ -115,3 +184,21 @@
     - service: notify.ios_k1_iphone
       data:
         message: "request_location_update"
+
+###########################################
+# HA起動時にtasmotaと同期
+###########################################
+- alias: "Power state on HA start-up"
+  id: '589749873498473'
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/sonoffs/SetOption19"
+        payload: "1"
+    - service: mqtt.publish
+      data:
+        topic: "cmnd/sonoffs/state"
+        payload: "" 

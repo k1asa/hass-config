@@ -80,6 +80,10 @@ tts:
     language: 'ja'
 weather:
   - platform: yweather
+  - platform: openweathermap
+    api_key: !secret openweathermap_key
+  - platform: darksky
+    api_key: !secret darksky_key
 
 ###########################################
 # Includes
@@ -94,6 +98,7 @@ media_player: !include media_player.yaml
 notify: !include notify.yaml
 script: !include scripts.yaml
 zone: !include zones.yaml
+history_graph: !include history_graph.yaml
 
 
 ###########################################
@@ -138,6 +143,16 @@ sensor:
     # YRウェザーのアイコン取得センサー
     ###########################################
     - platform: yr
+    ###########################################
+    # Yahoo天気取得センサー
+    ###########################################
+    - platform: yweather
+      monitored_conditions:
+      - weather
+      - weather_current
+      - temp_min
+      - temp_max
+      - wind_speed
     ###########################################
     # pi_holeの広告ブロック数センサー
     ###########################################
@@ -300,6 +315,33 @@ light:
   - platform: nanoleaf_aurora
     host: 192.168.3.10
     token: !secret aurora_token
+    ###########################################
+    # nRemoのScript呼び出し
+    ###########################################
+  - platform: template
+    lights:
+      living:
+        friendly_name: "リビング照明"
+        turn_on:
+          service: script.light_living_on
+        turn_off:
+          service: script.light_living_off
+
+      dining:
+        friendly_name: "ダイニング照明"
+        turn_on:
+          service: script.light_dining_on
+        turn_off:
+          service: script.light_dining_off
+
+      bed:
+        friendly_name: "ベッド照明"
+        turn_on:
+          service: script.light_bed_on
+        turn_off:
+          service: script.light_bed_off
+
+
 
 switch:
   ###########################################

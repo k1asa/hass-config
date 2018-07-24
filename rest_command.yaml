@@ -1,0 +1,74 @@
+###########################################
+# Remo Cloud API経由のスイッチ
+###########################################
+light_dining_on:
+  url: 'https://api.nature.global/1/signals/e50a704c-eee6-491a-bae8-d22463e48033/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+  
+light_dining_off:
+  url: 'https://api.nature.global/1/signals/6d5f7c3d-0d46-4cfe-8d10-7eb4a54bce44/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_dining_low:
+  url: 'https://api.nature.global/1/signals/6e5bb331-d2d4-4dd4-bb95-0be66d7493eb/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_dining_night:
+  url: 'https://api.nature.global/1/signals/f14ae2fa-52e4-4f97-80da-fcd74825d166/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_living_on:
+  url: 'https://api.nature.global/1/signals/c19757dc-c00c-4ae2-9fc4-8582699e5933/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_living_off:
+  url: 'https://api.nature.global/1/signals/92fdaa22-4ee6-466b-a53e-eb9cbdf841e7/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_living_low:
+  url: 'https://api.nature.global/1/signals/d81c8d20-ece1-4ac4-96ae-d09ce15c1ef2/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_living_night:
+  url: 'https://api.nature.global/1/signals/0e9456e8-b5af-428d-a176-cdf47b93ed3a/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_bed_on:
+  url: 'https://api.nature.global/1/signals/6613e90c-1b7a-4b4b-9311-de0254e29385/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_bed_off:
+  url: 'https://api.nature.global/1/signals/c450f1f3-da26-4126-adf7-89f67dadcb90/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_bed_low:
+  url: 'https://api.nature.global/1/signals/59fd436a-7543-4272-ba20-84a412af4836/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key
+
+light_bed_night:
+  url: 'https://api.nature.global/1/signals/1bb5e949-c43a-4237-a577-71e02fb75b55/send'
+  method: POST
+  headers:
+    Authorization: !secret nature_key

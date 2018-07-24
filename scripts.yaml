@@ -9,3 +9,61 @@ addon_rpcshutdown_redastray:
       addon: core_rpc_shutdown
       input: red-astray
 
+###########################################
+# ifttt経由でLINE_botに飛ばすスクリプト
+###########################################
+notify_line_mtg:
+  sequence:
+    - service: ifttt.trigger
+      data_template: {"event":"ekolun_line", "value1":"{{ value1 }}"}
+
+notify_line_log:
+  sequence:
+    - service: ifttt.trigger
+      data_template: {"event":"logline", "value1":"{{ value1 }}"}
+
+
+###########################################
+# nRemo APIたたくrest_command
+###########################################
+light_living_on:
+  sequence:
+  - service: rest_command.light_living_off
+  - delay:
+      seconds: 0.5
+  - service: rest_command.light_living_on
+
+light_living_off:
+  sequence:
+  - service: rest_command.light_living_on
+  - delay:
+      seconds: 0.5
+  - service: rest_command.light_living_off
+
+light_dining_on:
+  sequence:
+  - service: rest_command.light_dining_off
+  - delay:
+      seconds: 0.5
+  - service: rest_command.light_dining_on
+
+light_dining_off:
+  sequence:
+  - service: rest_command.light_dining_on
+  - delay:
+      seconds: 0.5
+  - service: rest_command.light_dining_off
+
+light_bed_on:
+  sequence:
+  - service: rest_command.light_bed_off
+  - delay:
+      seconds: 0.5
+  - service: rest_command.light_bed_on
+
+light_bed_off:
+  sequence:
+  - service: rest_command.light_bed_on
+  - delay:
+      seconds: 0.5
+  - service: rest_command.light_bed_off

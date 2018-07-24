@@ -7,3 +7,6 @@ Sensor:
       - group.ambients
       - group.nremo_living
       - group.nremo_bed
+      - history_graph.temperature
+      - history_graph.humidity
+      - history_graph.iluminate

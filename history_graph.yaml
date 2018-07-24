@@ -1,0 +1,32 @@
+gr1:
+  name: temperature
+  hours_to_show: 24
+  refresh: 300
+  entities:
+    - sensor.ambient_temperature
+    - sensor.nremo0_temp
+    - sensor.nremo1_temp
+
+gr2:
+  name: humidity
+  hours_to_show: 24
+  refresh: 300
+  entities:
+    - sensor.ambient_humidity
+    - sensor.nremo0_humidity
+    - sensor.nremo1_humidity
+
+gr3:
+  name: iluminate
+  hours_to_show: 24
+  refresh: 300
+  entities:
+    - sensor.nremo0_ilmi
+    - sensor.nremo1_ilmi
+
+gr4:
+  name: lock
+  hours_to_show: 24
+  refresh: 36
+  entities:
+    - lock.sesamea
