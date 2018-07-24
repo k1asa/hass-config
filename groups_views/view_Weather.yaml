@@ -8,4 +8,4 @@ Weather:
       - weather.yweather
       - weather.dark_sky
       - weather.openweathermap
-      - group.Yweather
+      - group.yweather
