@@ -108,9 +108,7 @@ ifttt:
   key: !secret ifttt_key
 
 device_tracker:
-  - platform: google_maps
-    username: !secret google_account_k1
-    password: !secret google_accountpw_k1
+  - platform: bluetooth_tracker
 
 ###########################################
 # 未整理
