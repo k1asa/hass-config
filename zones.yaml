@@ -20,7 +20,7 @@
 - name: office_a
   latitude: !secret latitude_office_a
   longitude: !secret longitude_office_a
-  radius: 200
+  radius: 300
   icon: mdi:office-building
 
 #地元駅

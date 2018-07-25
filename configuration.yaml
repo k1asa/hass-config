@@ -99,7 +99,7 @@ notify: !include notify.yaml
 script: !include scripts.yaml
 zone: !include zones.yaml
 history_graph: !include history_graph.yaml
-
+rest_command: !include rest_command.yaml
 
 ###########################################
 # Third Party Platforms
