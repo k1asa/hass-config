@@ -79,3 +79,14 @@ Yweather:
         - sensor.yweather_temperature_max
         - sensor.yweather_temperature_min
         - sensor.yweather_wind_speed
+
+pingPCs:
+    name: "PC接続"
+    entities:
+        - binary_sensor.blueastray
+        - binary_sensor.redastray
+        - binary_sensor.goldastray
+        - binary_sensor.greenastray
+        - binary_sensor.mirageastray
+        - binary_sensor.mainrouter
+        - binary_sensor.subrouter

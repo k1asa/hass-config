@@ -9,3 +9,4 @@ System:
       - group.all_automations
       - switch.redastray
       - group.pi_hole
+      - group.pingpcs
