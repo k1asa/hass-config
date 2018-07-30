@@ -90,3 +90,22 @@ pingPCs:
         - binary_sensor.mirageastray
         - binary_sensor.mainrouter
         - binary_sensor.subrouter
+
+Aircon1:
+    name: "リビングエアコン"
+    entities:
+        - sensor.P1_Energy_today
+        - sensor.P1_Energy_yesterday
+        - sensor.P1_Energy_total
+        - sensor.P1_Power
+        - sensor.P1_Voltage
+        - sensor.P1_Current
+Aircon2:
+    name: "ベッドエアコン"
+    entities:
+        - sensor.P2_Energy_today
+        - sensor.P2_Energy_yesterday
+        - sensor.P2_Energy_total
+        - sensor.P2_Power
+        - sensor.P2_Voltage
+        - sensor.P2_Current

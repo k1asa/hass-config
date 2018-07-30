@@ -10,3 +10,5 @@ Sensor:
       - history_graph.temperature
       - history_graph.humidity
       - history_graph.iluminate
+      - group.aircon1
+      - group.aircon2

@@ -56,6 +56,7 @@ zeroconf:
 updater:
   include_used_components: true
 
+
 ###########################################
 # Simple Components
 ###########################################
@@ -109,7 +110,6 @@ ifttt:
   key: !secret ifttt_key
 
 device_tracker:
-  - platform: bluetooth_tracker
 
 ###########################################
 # 未整理
@@ -294,6 +294,7 @@ sensor:
         nremo0_ilmi:
           friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name|replace("remo-","") }} 照度'
           value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.il.val }}'
+          unit_of_measurement: "lx"
         nremo1_temp:
           friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name|replace("remo-","") }} 室温'
           value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.te.val }}'
@@ -305,6 +306,70 @@ sensor:
         nremo1_ilmi:
           friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name|replace("remo-","") }} 照度'
           value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.il.val }}'
+          unit_of_measurement: "lx"
+    ###########################################
+    # Sonoff Pow から値読み出し
+    ###########################################
+    - platform: mqtt
+      name: "P1_Energy_today"
+      state_topic: "tele/sonoffP1/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Today"] }}'
+      unit_of_measurement: "kWh"
+    - platform: mqtt
+      name: "P1_Energy_yesterday"
+      state_topic: "tele/sonoffP1/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Yesterday"] }}'
+      unit_of_measurement: "kWh"
+    - platform: mqtt
+      name: "P1_Energy_total"
+      state_topic: "tele/sonoffP1/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Total"] }}'
+      unit_of_measurement: "kWh"
+    - platform: mqtt
+      name: "P1_Power"
+      state_topic: "tele/sonoffP1/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Power"] }}'
+      unit_of_measurement: "W"
+    - platform: mqtt
+      name: "P1_Voltage"
+      state_topic: "tele/sonoffP1/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
+      unit_of_measurement: "V"
+    - platform: mqtt
+      name: "P1_Current"
+      state_topic: "tele/sonoffP1/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Current"] }}'
+      unit_of_measurement: "A"
+    - platform: mqtt
+      name: "P2_Energy_today"
+      state_topic: "tele/sonoffP2/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Today"] }}'
+      unit_of_measurement: "kWh"
+    - platform: mqtt
+      name: "P2_Energy_yesterday"
+      state_topic: "tele/sonoffP2/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Yesterday"] }}'
+      unit_of_measurement: "kWh"
+    - platform: mqtt
+      name: "P2_Energy_total"
+      state_topic: "tele/sonoffP2/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Total"] }}'
+      unit_of_measurement: "kWh"
+    - platform: mqtt
+      name: "P2_Power"
+      state_topic: "tele/sonoffP2/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Power"] }}'
+      unit_of_measurement: "W"
+    - platform: mqtt
+      name: "P2_Voltage"
+      state_topic: "tele/sonoffP2/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
+      unit_of_measurement: "V"
+    - platform: mqtt
+      name: "P2_Current"
+      state_topic: "tele/sonoffP2/SENSOR"
+      value_template: '{{ value_json["ENERGY"]["Current"] }}'
+      unit_of_measurement: "A"
 
 
 light:
@@ -312,7 +377,7 @@ light:
     # Nanoleaf Aurora操作
     ###########################################
   - platform: nanoleaf_aurora
-    host: 192.168.3.10
+    host: 192.168.3.18
     token: !secret aurora_token
     ###########################################
     # nRemoのScript呼び出し
@@ -344,13 +409,55 @@ light:
 
 switch:
   ###########################################
-  # MQTT経由のSonoff Basic
+  # MQTT経由のSonoff Basic1
   ###########################################
   - platform: mqtt
     name: "Hot Water"
     state_topic: "stat/sonoff1/POWER"
     command_topic: "cmnd/sonoff1/POWER"
     availability_topic: "tele/sonoff1/LWT"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    retain: false
+  ###########################################
+  # MQTT経由のSonoff Basic2
+  ###########################################
+  - platform: mqtt
+    name: "Hot Water"
+    state_topic: "stat/sonoff2/POWER"
+    command_topic: "cmnd/sonoff2/POWER"
+    availability_topic: "tele/sonoff2/LWT"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    retain: false
+  ###########################################
+  # MQTT経由のSonoff Basic3
+  ###########################################
+  - platform: mqtt
+    name: "Hot Water"
+    state_topic: "stat/sonoff3/POWER"
+    command_topic: "cmnd/sonoff3/POWER"
+    availability_topic: "tele/sonoff3/LWT"
+    qos: 1
+    payload_on: "ON"
+    payload_off: "OFF"
+    payload_available: "Online"
+    payload_not_available: "Offline"
+    retain: false
+  ###########################################
+  # MQTT経由のSonoff Basic4
+  ###########################################
+  - platform: mqtt
+    name: "Hot Water"
+    state_topic: "stat/sonoff4/POWER"
+    command_topic: "cmnd/sonoff4/POWER"
+    availability_topic: "tele/sonoff4/LWT"
     qos: 1
     payload_on: "ON"
     payload_off: "OFF"
@@ -367,37 +474,4 @@ switch:
     mac_address: "40-8D-5C-53-16-3A"
     turn_off: 
       service: script.addon_rpcshutdown_redastray
-  ###########################################
-  # Remo経由のスイッチ(困惑中)
-  ###########################################
-#ダイニング電灯
-#curl -X POST "https://api.nature.global/1/signals/e50a704c-eee6-491a-bae8-d22463e48033/send" -H "Authorization: !secret nature_key"
-#オン
-#curl -X POST "https://api.nature.global/1/signals/6d5f7c3d-0d46-4cfe-8d10-7eb4a54bce44/send" -H "Authorization: !secret nature_key"
-#オフ
-#curl -X POST "https://api.nature.global/1/signals/6e5bb331-d2d4-4dd4-bb95-0be66d7493eb/send" -H "Authorization: !secret nature_key"
-#暗く
-#curl -X POST "https://api.nature.global/1/signals/f14ae2fa-52e4-4f97-80da-fcd74825d166/send" -H "Authorization: !secret nature_key"
-#常夜
-#
-#リビング電灯
-#curl -X POST "https://api.nature.global/1/signals/c19757dc-c00c-4ae2-9fc4-8582699e5933/send" -H "Authorization: !secret nature_key"
-#オン
-#curl -X POST "https://api.nature.global/1/signals/92fdaa22-4ee6-466b-a53e-eb9cbdf841e7/send" -H "Authorization: !secret nature_key"
-#オフ
-#curl -X POST "https://api.nature.global/1/signals/d81c8d20-ece1-4ac4-96ae-d09ce15c1ef2/send" -H "Authorization: !secret nature_key"
-#暗く
-#curl -X POST "https://api.nature.global/1/signals/0e9456e8-b5af-428d-a176-cdf47b93ed3a/send" -H "Authorization: !secret nature_key"
-#常夜
-#
-#ベッド電灯
-#curl -X POST "https://api.nature.global/1/signals/6613e90c-1b7a-4b4b-9311-de0254e29385/send" -H "Authorization: !secret nature_key"
-#オン
-#curl -X POST "https://api.nature.global/1/signals/c450f1f3-da26-4126-adf7-89f67dadcb90/send" -H "Authorization: !secret nature_key"
-#オフ
-#curl -X POST "https://api.nature.global/1/signals/59fd436a-7543-4272-ba20-84a412af4836/send" -H "Authorization: !secret nature_key"
-#暗く
-#curl -X POST "https://api.nature.global/1/signals/1bb5e949-c43a-4237-a577-71e02fb75b55/send" -H "Authorization: !secret nature_key"
-#常夜
-
 

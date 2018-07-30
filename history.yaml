@@ -33,7 +33,14 @@
       - sensor.nremo_json
       - camera.k1_map
       - camera.ay_map
+      - sensor.speedtest_ping
       - sensor.yweather_temperature_max
       - sensor.yweather_condition
       - sensor.yweather_temperature_min
       - sensor.yweather_wind_speed
+      - sensor.p1_energy_today
+      - sensor.p1_voltage
+      - sensor.p1_current
+      - sensor.p2_energy_today
+      - sensor.p2_voltage
+      - sensor.p2_current

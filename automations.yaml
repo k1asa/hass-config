@@ -1,6 +1,3 @@
-###########################################
-# HA起動時にLINE通知
-###########################################
 - alias: HA is online
   id: '658745877754'
   initial_state: true
@@ -8,197 +5,191 @@
     platform: homeassistant
     event: start
   action:
-    - service: script.notify_line_log
-      data:
-        value1: 'HA is start'
-###########################################
-# office出たら通知
-###########################################
+  - service: script.notify_line_log
+    data:
+      value1: HA is start
 - alias: auto_notify_k1_office
   id: '47389743847874'
-  initial_state: True
+  initial_state: true
   trigger:
     platform: zone
     entity_id: device_tracker.k1_phone
     zone: zone.office_k
     event: leave
   action:
-    - service: notify.ios_ay_phone
-      data:
-        message: "k1が職場を離脱"
-    - service: script.notify_line_mtg
-      data:
-        value1: 'k1が職場から離脱'
-        
+  - service: notify.ios_ay_phone
+    data:
+      message: k1が職場を離脱
+  - service: script.notify_line_mtg
+    data:
+      value1: k1が職場から離脱
 - alias: auto_notify_ay_office
   id: '453947837978555'
-  initial_state: True
+  initial_state: true
   trigger:
     platform: zone
     entity_id: device_tracker.ay_phone
     zone: zone.office_a
     event: leave
   action:
-    - service: notify.ios_k1_phone
-      data:
-        message: "ayが職場を離脱"
-    - service: script.notify_line_mtg
-      data:
-        value1: 'ayが職場を離脱'
-
-###########################################
-# 駅に着いたらもう通知
-###########################################
+  - service: notify.ios_k1_phone
+    data:
+      message: ayが職場を離脱
+  - service: script.notify_line_mtg
+    data:
+      value1: ayが職場を離脱
 - alias: auto_notify_k1_ikuta
   id: '5186418276318273'
-  initial_state: True
+  initial_state: true
   trigger:
     platform: zone
     entity_id: device_tracker.k1_phone
     zone: zone.ikuta
     event: enter
   action:
-    - service: notify.ios_ay_phone
-      data:
-        message: "k1が生田駅"
-    - service: script.notify_line_mtg
-      data:
-        value1: 'k1が生田駅'
-        
+  - service: notify.ios_ay_phone
+    data:
+      message: k1が生田駅
+  - service: script.notify_line_mtg
+    data:
+      value1: k1が生田駅
 - alias: auto_notify_ay_ikuta
-  initial_state: True
+  initial_state: true
   trigger:
     platform: zone
     entity_id: device_tracker.ay_phone
     zone: zone.ikuta
     event: enter
   action:
-    - service: notify.ios_k1_phone
-      data:
-        message: "ayが生田駅"
-    - service: script.notify_line_mtg
-      data:
-        value1: 'ayが生田駅'
-  id: 'bcb567724cfe408d950910f48b021d9b'
-
-###########################################
-# 帰宅したらもう一方に通知
-###########################################
+  - service: notify.ios_k1_phone
+    data:
+      message: ayが生田駅
+  - service: script.notify_line_mtg
+    data:
+      value1: ayが生田駅
+  id: bcb567724cfe408d950910f48b021d9b
 - alias: auto_notify_k1_home
-  initial_state: True
+  initial_state: true
   trigger:
     platform: zone
     entity_id: device_tracker.k1_phone
     zone: zone.home
     event: enter
   action:
-    - service: notify.ios_ay_phone
-      data:
-        message: "k1が帰宅したよ"
-    - service: script.notify_line_mtg
-      data:
-        value1: 'k1が帰宅'
+  - service: notify.ios_ay_phone
+    data:
+      message: k1が帰宅したよ
+  - service: script.notify_line_mtg
+    data:
+      value1: k1が帰宅
   id: '329241390802'
-
 - alias: auto_notify_ay_home
-  initial_state: True
+  initial_state: true
   trigger:
     platform: zone
     entity_id: device_tracker.ay_phone
     zone: zone.home
     event: enter
   action:
-    - service: notify.ios_k1_phone
-      data:
-        message: "ayが帰宅"
-    - service: script.notify_line_mtg
-      data:
-        value1: 'ayが生田駅'
+  - service: notify.ios_k1_phone
+    data:
+      message: ayが帰宅
+  - service: script.notify_line_mtg
+    data:
+      value1: ayが生田駅
   id: '329241390802'
-
-###########################################
-# 平日+土曜に昼飯持参のための湯沸し
-###########################################
 - id: '1531186947510'
-  initial_state: True
-  alias: HotWater
+  alias: HotWater_autoOff
   trigger:
   - at: 05:00:00
     platform: time
   condition:
-    condition: and
-    conditions: 
-      - condition: time
-        weekday:
-          - mon
-          - tue
-          - wed
-          - thu
-          - fri
-          - sat
-      - condition: or
-        conditions:
-          - condition: state
-            entity_id: device_tracker.k1_phone
-            state: 'home'
-          - condition: state
-            entity_id: device_tracker.ay_phone
-            state: 'home'
+  - condition: and
+    conditions:
+    - condition: time
+      weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: device_tracker.k1_phone
+        state: home
+      - condition: state
+        entity_id: device_tracker.ay_phone
+        state: home
   action:
-  - service: switch.turn_on
-    data:
+  - data:
       entity_id: switch.hot_water
-  - service: script.notify_line_log
-    data:
-      value1: '湯沸しon'
+    service: switch.turn_on
+  - data:
+      value1: 湯沸しon
+    service: script.notify_line_log
   - delay: 01:00:00
-  - service: switch.turn_off
-    data:
+  - data:
       entity_id: switch.hot_water
-  - service: script.notify_line_log
-    data:
-      value1: '湯沸しoff'
-
-###########################################
-# HA起動時に接続済みのiOS端末にlocation更新催促
-###########################################
+    service: switch.turn_off
+  - data:
+      value1: 湯沸しoff
+    service: script.notify_line_log
+  initial_state: true
 - alias: Update IOS location on HA start
-  initial_state: True
+  initial_state: true
   id: '106962549528'
   trigger:
   - platform: homeassistant
     event: start
   action:
-    - service: notify.ios_ay_phone
-      data:
-        message: "request_location_update"
-    - delay: 00:00:01
-    - service: notify.ios_k1_phone
-      data:
-        message: "request_location_update"
-    - delay: 00:00:20
-    - service: notify.ios_ay_iphone
-      data:
-        message: "request_location_update"
-    - delay: 00:00:01
-    - service: notify.ios_k1_iphone
-      data:
-        message: "request_location_update"
-
-###########################################
-# HA起動時にtasmotaと同期
-###########################################
-- alias: "Power state on HA start-up"
+  - service: notify.ios_ay_phone
+    data:
+      message: request_location_update
+  - delay: 00:00:01
+  - service: notify.ios_k1_phone
+    data:
+      message: request_location_update
+  - delay: 00:00:20
+  - service: notify.ios_ay_iphone
+    data:
+      message: request_location_update
+  - delay: 00:00:01
+  - service: notify.ios_k1_iphone
+    data:
+      message: request_location_update
+- alias: Power state on HA start-up
   id: '589749873498473'
   trigger:
     platform: homeassistant
     event: start
   action:
-    - service: mqtt.publish
-      data:
-        topic: "cmnd/sonoffs/SetOption19"
-        payload: "1"
-    - service: mqtt.publish
-      data:
-        topic: "cmnd/sonoffs/state"
-        payload: "" 
+  - service: mqtt.publish
+    data:
+      topic: cmnd/sonoffs/SetOption19
+      payload: '1'
+  - service: mqtt.publish
+    data:
+      topic: cmnd/sonoffs/state
+      payload: ''
+- id: '1532838647286'
+  alias: Reset Value of total at 1st day per month
+  trigger:
+  - platform: template
+    value_template: now().day | int == 1
+  - platform: time
+    hours: 0
+    minutes: '/10'
+    seconds: 00
+  condition: []
+  action:
+  - service: mqtt.publish
+    data:
+      topic: "cmnd/sonoffP1/EnergyReset3"
+      payload: "0"
+  - service: mqtt.publish
+    data:
+      topic: "cmnd/sonoffP2/EnergyReset3"
+      payload: "0"
+
