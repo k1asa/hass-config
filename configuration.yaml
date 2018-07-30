@@ -412,7 +412,7 @@ switch:
   # MQTT経由のSonoff Basic1
   ###########################################
   - platform: mqtt
-    name: "Hot Water"
+    name: "Sonoff1"
     state_topic: "stat/sonoff1/POWER"
     command_topic: "cmnd/sonoff1/POWER"
     availability_topic: "tele/sonoff1/LWT"
@@ -426,7 +426,7 @@ switch:
   # MQTT経由のSonoff Basic2
   ###########################################
   - platform: mqtt
-    name: "Hot Water"
+    name: "Sonoff2"
     state_topic: "stat/sonoff2/POWER"
     command_topic: "cmnd/sonoff2/POWER"
     availability_topic: "tele/sonoff2/LWT"
@@ -440,7 +440,7 @@ switch:
   # MQTT経由のSonoff Basic3
   ###########################################
   - platform: mqtt
-    name: "Hot Water"
+    name: "Sonoff2"
     state_topic: "stat/sonoff3/POWER"
     command_topic: "cmnd/sonoff3/POWER"
     availability_topic: "tele/sonoff3/LWT"
@@ -454,7 +454,7 @@ switch:
   # MQTT経由のSonoff Basic4
   ###########################################
   - platform: mqtt
-    name: "Hot Water"
+    name: "Sonoff4"
     state_topic: "stat/sonoff4/POWER"
     command_topic: "cmnd/sonoff4/POWER"
     availability_topic: "tele/sonoff4/LWT"
