@@ -16,8 +16,9 @@ Home Assistant(Hass.io)の設定各ファイル
 - Nature Remo x2
 - Amazon Dash Button
 - Sonoff Basic (tasmota)
+- Sonoff Pow
 - NanoLeaf Aurora
-- Google Home mini
+- Google Home mini x2
 - Sony Bravia KJ-49X8300D
 - PS4 pro
 - DesktopPC Win10

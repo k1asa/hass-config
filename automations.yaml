@@ -1,3 +1,6 @@
+###########################################
+# HomeAssistant起動完了時に通知
+###########################################
 - alias: HA is online
   id: '658745877754'
   initial_state: true
@@ -6,8 +9,11 @@
     event: start
   action:
   - service: script.notify_line_log
-    data:
-      value1: HA is start
+    data: 
+      value1: "HA is start"
+###########################################
+# Office出たら通知
+###########################################
 - alias: auto_notify_k1_office
   id: '47389743847874'
   initial_state: true
@@ -19,10 +25,10 @@
   action:
   - service: notify.ios_ay_phone
     data:
-      message: k1が職場を離脱
+      message: "k1が職場を離脱"
   - service: script.notify_line_mtg
     data:
-      value1: k1が職場から離脱
+      value1: "k1が職場から離脱"
 - alias: auto_notify_ay_office
   id: '453947837978555'
   initial_state: true
@@ -34,10 +40,13 @@
   action:
   - service: notify.ios_k1_phone
     data:
-      message: ayが職場を離脱
+      message: "ayが職場を離脱"
   - service: script.notify_line_mtg
     data:
-      value1: ayが職場を離脱
+      value1: "ayが職場を離脱"
+###########################################
+# 地元駅着いたら通知
+###########################################
 - alias: auto_notify_k1_ikuta
   id: '5186418276318273'
   initial_state: true
@@ -49,10 +58,10 @@
   action:
   - service: notify.ios_ay_phone
     data:
-      message: k1が生田駅
+      message: "k1が生田駅"
   - service: script.notify_line_mtg
     data:
-      value1: k1が生田駅
+      value1: "k1が生田駅"
 - alias: auto_notify_ay_ikuta
   initial_state: true
   trigger:
@@ -63,11 +72,14 @@
   action:
   - service: notify.ios_k1_phone
     data:
-      message: ayが生田駅
+      message: "ayが生田駅"
   - service: script.notify_line_mtg
     data:
-      value1: ayが生田駅
+      value1: "ayが生田駅"
   id: bcb567724cfe408d950910f48b021d9b
+###########################################
+# 帰宅したら通知
+###########################################
 - alias: auto_notify_k1_home
   initial_state: true
   trigger:
@@ -78,10 +90,10 @@
   action:
   - service: notify.ios_ay_phone
     data:
-      message: k1が帰宅したよ
+      message: "k1が帰宅したよ"
   - service: script.notify_line_mtg
     data:
-      value1: k1が帰宅
+      value1: "k1が帰宅"
   id: '329241390802'
 - alias: auto_notify_ay_home
   initial_state: true
@@ -93,11 +105,14 @@
   action:
   - service: notify.ios_k1_phone
     data:
-      message: ayが帰宅
+      message: 'ayが帰宅'
   - service: script.notify_line_mtg
     data:
-      value1: ayが生田駅
+      value1: "ayが生田駅"
   id: '329241390802'
+###########################################
+# 湯沸しのON/OFFを通知
+###########################################
 - id: '1531186947510'
   alias: HotWater_autoOff
   trigger:
@@ -123,20 +138,23 @@
         entity_id: device_tracker.ay_phone
         state: home
   action:
-  - data:
-      entity_id: switch.hot_water
-    service: switch.turn_on
-  - data:
-      value1: 湯沸しon
-    service: script.notify_line_log
+  - service: switch.turn_on
+    data:
+      entity_id: switch.sonoff1
+  - service: script.notify_line_log
+    data: 
+      value1: "湯沸しon"
   - delay: 01:00:00
-  - data:
-      entity_id: switch.hot_water
-    service: switch.turn_off
-  - data:
-      value1: 湯沸しoff
+  - service: switch.turn_off
+    data:
+      entity_id: switch.sonoff1
+  - data: 
+      value1: "湯沸しoff"
     service: script.notify_line_log
   initial_state: true
+###########################################
+# HomeAssistantの起動時にiOSへ位置情報uploadを指示
+###########################################
 - alias: Update IOS location on HA start
   initial_state: true
   id: '106962549528'
@@ -146,19 +164,22 @@
   action:
   - service: notify.ios_ay_phone
     data:
-      message: request_location_update
+      message: "request_location_update"
   - delay: 00:00:01
   - service: notify.ios_k1_phone
     data:
-      message: request_location_update
+      message: "request_location_update"
   - delay: 00:00:20
   - service: notify.ios_ay_iphone
     data:
-      message: request_location_update
+      message: "request_location_update"
   - delay: 00:00:01
   - service: notify.ios_k1_iphone
     data:
-      message: request_location_update
+      message: "request_location_update"
+###########################################
+# HomeAssistant起動時にsonoff-tasmotaへ指示
+###########################################
 - alias: Power state on HA start-up
   id: '589749873498473'
   trigger:
@@ -173,23 +194,103 @@
     data:
       topic: cmnd/sonoffs/state
       payload: ''
+###########################################
+# 毎月1日に積算電気代をリセット
+###########################################
 - id: '1532838647286'
   alias: Reset Value of total at 1st day per month
   trigger:
-  - platform: template
-    value_template: now().day | int == 1
   - platform: time
     hours: 0
-    minutes: '/10'
-    seconds: 00
-  condition: []
+    minutes: /10
+    seconds: 0
+  condition:
+    condition: template
+    value_template: '{{now().day | int == 1}}'
   action:
   - service: mqtt.publish
     data:
-      topic: "cmnd/sonoffP1/EnergyReset3"
-      payload: "0"
+      topic: cmnd/sonoffP1/EnergyReset3
+      payload: '0'
   - service: mqtt.publish
     data:
-      topic: "cmnd/sonoffP2/EnergyReset3"
-      payload: "0"
-
+      topic: cmnd/sonoffP2/EnergyReset3
+      payload: '0'
+  - data: 
+      value1: "電気代積算リセット実行済"
+    service: script.notify_line_log
+###########################################
+# 各装置のping無応答時に通知
+###########################################
+- id: '1532937313173'
+  alias: notify_blue_offline
+  trigger:
+  - entity_id: binary_sensor.blueastray
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      value1: "Blue Offline"
+    service: script.notify_line_log
+- id: '1532937313174'
+  alias: notify_gold_offline
+  trigger:
+  - entity_id: binary_sensor.goldastray
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      value1: "Gold Offline"
+    service: script.notify_line_log
+- id: '1532937313175'
+  alias: notify_green_offline
+  trigger:
+  - entity_id: binary_sensor.greenastray
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      value1: "Green Offline"
+    service: script.notify_line_log
+- id: '1532937313176'
+  alias: notify_Mirage_offline
+  trigger:
+  - entity_id: binary_sensor.mirageastray
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      value1: "Mirage Offline"
+    service: script.notify_line_log
+- id: '1532937313177'
+  alias: notify_MainRT_offline
+  trigger:
+  - entity_id: binary_sensor.mainrouter
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      value1: "MainRT Offline"
+    service: script.notify_line_log
+- id: '1532937313178'
+  alias: notify_SubRT_offline
+  trigger:
+  - entity_id: binary_sensor.subrouter
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      value1: "SubRT Offline"
+    service: script.notify_line_log

@@ -10,16 +10,16 @@ k1_phone:
     name: "K1 Phone"
     entities:
         - sensor.sonytabletp_battery_level
-        - sensor.sonytabletp_battery_state
+        - sensor.k1_phone_battery_state
 
 ay_phone:
     name: "Ay Phone"
     entities:
         - sensor.ayano0720_battery_level_2
-        - sensor.ayano0720_battery_state_2
+        - sensor.ay_phone_battery_state
 
 presences:
-    name: "Where is"
+    name: "現在地"
     entities:
         - device_tracker.k1_phone
         - device_tracker.ay_phone
@@ -46,7 +46,7 @@ Sun_Moon:
         - sensor.season_template
 
 Netspeed:
-    name: "speedtest"
+    name: "インターネット速度計測"
     entities:
         - sensor.speedtest_ping
         - sensor.speedtest_download
@@ -71,14 +71,25 @@ pi_hole:
     entities:
         - sensor.pihole_ads_blocked_today
 
-Yweather:
-    name: "Yahoo天気"
+yr_today:
+    name: "yr天気(現在)"
     entities:
-        - sensor.yweather_condition
-        - sensor.yweather_current
-        - sensor.yweather_temperature_max
-        - sensor.yweather_temperature_min
-        - sensor.yweather_wind_speed
+        - sensor.yr_now_symbol
+        - sensor.yr_now_temperature
+        - sensor.yr_now_humidity
+        - sensor.yr_now_precipitation
+        - sensor.yr_now_pressure
+        - sensor.yr_now_wind_speed
+
+yr_tommorow:
+    name: "yr天気(24時間後)"
+    entities:
+        - sensor.yr_24hr_symbol
+        - sensor.yr_24hr_temperature
+        - sensor.yr_24hr_humidity
+        - sensor.yr_24hr_precipitation
+        - sensor.yr_24hr_pressure
+        - sensor.yr_24hr_wind_speed
 
 pingPCs:
     name: "PC接続"

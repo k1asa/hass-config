@@ -65,7 +65,6 @@ ffmpeg:
 homekit:
 ios:
 map:
-mqtt:
 sun:
 wake_on_lan:
 
@@ -80,11 +79,17 @@ tts:
   - platform: google
     language: 'ja'
 weather:
-  - platform: yweather
   - platform: openweathermap
     api_key: !secret openweathermap_key
   - platform: darksky
     api_key: !secret darksky_key
+mqtt:  #生死メッセージだけ設定
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
 
 ###########################################
 # Includes
@@ -138,24 +143,37 @@ sensor:
     # HAの起動時間センサー
     ###########################################
     - platform: uptime
+      friendly_name: "稼働日数"
     ###########################################
     # YRウェザーのアイコン取得センサー
     ###########################################
     - platform: yr
-    ###########################################
-    # Yahoo天気取得センサー
-    ###########################################
-    - platform: yweather
+      name: Yr_now
+      forecast: 0
       monitored_conditions:
-      - weather
-      - weather_current
-      - temp_min
-      - temp_max
-      - wind_speed
+        - temperature
+        - symbol
+        - precipitation
+        - windSpeed
+        - pressure
+        - humidity
+        - cloudiness
+    - platform: yr
+      name: Yr_24hr
+      forecast: 24
+      monitored_conditions:
+        - temperature
+        - symbol
+        - precipitation
+        - windSpeed
+        - pressure
+        - humidity
+        - cloudiness
     ###########################################
     # pi_holeの広告ブロック数センサー
     ###########################################
     - platform: pi_hole
+      friendly_name: "広告削除数"
     ###########################################
     # PiのGPIOにつないだI2C接続のbme280センサー
     ###########################################
@@ -206,10 +224,10 @@ sensor:
           unit_of_measurement: 'degrees'
         sunrise:
           value_template: '{{ ((as_timestamp(states.sun.sun.attributes.next_rising)) | timestamp_local) [11:16] }} am'
-          friendly_name: 'Sunrise'
+          friendly_name: '日昇'
         sunset:
           value_template: '{{ ((as_timestamp(states.sun.sun.attributes.next_setting)-(43200)) | timestamp_local) [11:16] }} pm'
-          friendly_name: 'Sunset'
+          friendly_name: '日没'
     ###########################################
     # Speedtest.netでの速度計測を定期的に行い記録する。
     #  混雑時間帯など把握できたらと思って設置
@@ -279,7 +297,7 @@ sensor:
       name: nremo_json
       headers:
         Authorization: !secret nature_key
-#      scan_interval: 15
+      scan_interval: 150
       force_update: true
     - platform: template
       sensors:
@@ -312,71 +330,108 @@ sensor:
     ###########################################
     - platform: mqtt
       name: "P1_Energy_today"
+      friendly_name: "今日の積算使用量"
       state_topic: "tele/sonoffP1/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Today"] }}'
       unit_of_measurement: "kWh"
     - platform: mqtt
       name: "P1_Energy_yesterday"
+      friendly_name: "昨日の積算使用量"
       state_topic: "tele/sonoffP1/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Yesterday"] }}'
       unit_of_measurement: "kWh"
     - platform: mqtt
       name: "P1_Energy_total"
+      friendly_name: "今月の積算使用量"
       state_topic: "tele/sonoffP1/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Total"] }}'
       unit_of_measurement: "kWh"
     - platform: mqtt
       name: "P1_Power"
+      friendly_name: "瞬間消費電力"
       state_topic: "tele/sonoffP1/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Power"] }}'
       unit_of_measurement: "W"
     - platform: mqtt
       name: "P1_Voltage"
+      friendly_name: "電圧"
       state_topic: "tele/sonoffP1/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
       unit_of_measurement: "V"
     - platform: mqtt
       name: "P1_Current"
+      friendly_name: "瞬間消費電流"
       state_topic: "tele/sonoffP1/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Current"] }}'
       unit_of_measurement: "A"
     - platform: mqtt
       name: "P2_Energy_today"
+      friendly_name: "今日の積算使用量"
       state_topic: "tele/sonoffP2/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Today"] }}'
       unit_of_measurement: "kWh"
     - platform: mqtt
       name: "P2_Energy_yesterday"
+      friendly_name: "昨日の積算使用量"
       state_topic: "tele/sonoffP2/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Yesterday"] }}'
       unit_of_measurement: "kWh"
     - platform: mqtt
       name: "P2_Energy_total"
+      friendly_name: "今月の積算使用量"
       state_topic: "tele/sonoffP2/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Total"] }}'
       unit_of_measurement: "kWh"
     - platform: mqtt
       name: "P2_Power"
+      friendly_name: "瞬間消費電力"
       state_topic: "tele/sonoffP2/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Power"] }}'
       unit_of_measurement: "W"
     - platform: mqtt
       name: "P2_Voltage"
+      friendly_name: "電圧"
       state_topic: "tele/sonoffP2/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
       unit_of_measurement: "V"
     - platform: mqtt
       name: "P2_Current"
+      friendly_name: "瞬間消費電流"
       state_topic: "tele/sonoffP2/SENSOR"
       value_template: '{{ value_json["ENERGY"]["Current"] }}'
       unit_of_measurement: "A"
-
+    ###########################################
+    # iphone充電状態のセンサー
+    ###########################################
+    - platform: template
+      sensors:
+        ay_phone_battery_state:
+          friendly_name: "充電状態"
+          value_template: >-
+            {% if is_state('sensor.ayano0720_battery_state_2', 'Charging') %}
+            充電中
+            {% elif is_state('sensor.ayano0720_battery_state_2', 'Full') %}
+            満充電
+            {% else %}
+            放電中
+            {% endif %}
+        k1_phone_battery_state:
+          friendly_name: "充電状態"
+          value_template: >-
+            {% if is_state('sensor.sonytabletp_battery_state', 'Charging') %}
+            充電中
+            {% elif is_state('sensor.sonytabletp_battery_state', 'Full') %}
+            満充電
+            {% else %}
+            放電中
+            {% endif %}
 
 light:
     ###########################################
     # Nanoleaf Aurora操作
     ###########################################
   - platform: nanoleaf_aurora
+    friendly_name: "オーロラ"
     host: 192.168.3.18
     token: !secret aurora_token
     ###########################################
@@ -390,14 +445,12 @@ light:
           service: script.light_living_on
         turn_off:
           service: script.light_living_off
-
       dining:
         friendly_name: "ダイニング照明"
         turn_on:
           service: script.light_dining_on
         turn_off:
           service: script.light_dining_off
-
       bed:
         friendly_name: "ベッド照明"
         turn_on:
@@ -405,7 +458,7 @@ light:
         turn_off:
           service: script.light_bed_off
 
-
+    
 
 switch:
   ###########################################
@@ -440,7 +493,7 @@ switch:
   # MQTT経由のSonoff Basic3
   ###########################################
   - platform: mqtt
-    name: "Sonoff2"
+    name: "Sonoff3"
     state_topic: "stat/sonoff3/POWER"
     command_topic: "cmnd/sonoff3/POWER"
     availability_topic: "tele/sonoff3/LWT"
@@ -470,6 +523,7 @@ switch:
   ###########################################
   - platform: wake_on_lan
     name: 'Red-Astray'
+    friendly_name: "DeskPC電源"
     host: 192.168.3.3
     mac_address: "40-8D-5C-53-16-3A"
     turn_off: 

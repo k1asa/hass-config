@@ -3,6 +3,58 @@
 ######################
 
 # Enables support for tracking state changes over time
+  use_include_order: True
+  include:
+    entities:
+      - device_tracker.ay_phone
+      - sensor.ayano0720_battery_state_2
+      - sensor.ay_lastupdate
+      - device_tracker.k1_phone
+      - sensor.sonytabletp_battery_state
+      - sensor.k1_lastupdate
+      - lock.sesamea
+      - switch.sonoff1
+      - switch.sonoff2
+      - switch.sonoff3
+      - switch.sonoff4
+      - light.aurora
+      - light.living
+      - light.dining
+      - light.bed
+      - camera.living_cam
+      - binary_sensor.blueastray
+      - binary_sensor.redastray
+      - binary_sensor.greenastray
+      - binary_sensor.goldastray
+      - binary_sensor.mirageastray
+      - binary_sensor.mainrouter
+      - binary_sensor.subrouter
+      - media_player._2
+      - media_player.bravia
+      - media_player.mini_2
+      - media_player.mini
+      - sensor.speedtest_upload
+      - sensor.speedtest_download
+      - sensor.p1_power
+      - sensor.p2_power
+      - sensor.p1_energy_total
+      - sensor.p2_energy_total
+      - sensor.nremo0_ilmi
+      - sensor.nremo1_ilmi
+      - sensor.ambient_temperature
+      - sensor.nremo0_temp
+      - sensor.nremo1_temp
+      - sensor.ambient_pressure
+      - sensor.ambient_humidity
+      - sensor.nremo0_humidity
+      - sensor.nremo1_humidity
+      - sensor.yr_now_symbol
+      - group.yweather
+      - weather.openweathermap
+      - weather.dark_sky
+
+
+
   exclude:
     domains:
       - automation
@@ -10,10 +62,10 @@
       - updater
       - configurator
       - group
-#      - camera
       - script
       - sun
       - history_graph
+
       
     entities:
       - sensor.pihole_ads_blocked_today
