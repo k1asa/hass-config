@@ -24,46 +24,53 @@ notify_line_log:
 
 
 ###########################################
-# nRemo APIたたくrest_command
+# nRemo APIで電灯たたくrest_command
 ###########################################
 light_living_on:
   sequence:
-  - service: rest_command.light_living_off
-  - delay:
-      seconds: 0.5
   - service: rest_command.light_living_on
 
 light_living_off:
   sequence:
-  - service: rest_command.light_living_on
-  - delay:
-      seconds: 0.5
   - service: rest_command.light_living_off
 
 light_dining_on:
   sequence:
-  - service: rest_command.light_dining_off
-  - delay:
-      seconds: 0.5
   - service: rest_command.light_dining_on
 
 light_dining_off:
   sequence:
-  - service: rest_command.light_dining_on
-  - delay:
-      seconds: 0.5
   - service: rest_command.light_dining_off
 
 light_bed_on:
   sequence:
-  - service: rest_command.light_bed_off
-  - delay:
-      seconds: 0.5
   - service: rest_command.light_bed_on
 
 light_bed_off:
   sequence:
-  - service: rest_command.light_bed_on
-  - delay:
-      seconds: 0.5
   - service: rest_command.light_bed_off
+
+###########################################
+# nRemo APIでエアコンたたくrest_command
+###########################################
+aircon_living:
+  sequence:
+  - service: rest_command.aircon_living
+    data:
+      temp: >-
+        {% if is_state('sensor.season', 'summer')%}1{% elif is_state('sensor.season', 'winter')%}-1{%else%}0{%endif%}
+
+aircon_bed:
+  sequence:
+  - service: rest_command.aircon_bed
+    data:
+      temp: >-
+        {% if is_state('sensor.season', 'summer')%}1{% elif is_state('sensor.season', 'winter')%}-1{%else%}0{%endif%}
+
+aircon_bed_off:
+  sequence:
+  - service: rest_command.aircon_bed_off
+
+aircon_living_off:
+  sequence:
+  - service: rest_command.aircon_living_off

@@ -108,6 +108,7 @@ Aircon1:
         - sensor.P1_Energy_today
         - sensor.P1_Energy_yesterday
         - sensor.P1_Energy_total
+        - sensor.p1_price
         - sensor.P1_Power
         - sensor.P1_Voltage
         - sensor.P1_Current
@@ -117,6 +118,7 @@ Aircon2:
         - sensor.P2_Energy_today
         - sensor.P2_Energy_yesterday
         - sensor.P2_Energy_total
+        - sensor.p2_price
         - sensor.P2_Power
         - sensor.P2_Voltage
         - sensor.P2_Current
