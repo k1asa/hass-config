@@ -52,6 +52,8 @@
       - group.yweather
       - weather.openweathermap
       - weather.dark_sky
+      - sensor.bed_bme280_pressure
+      - sensor.bed_bme280_temp
 
 
 
