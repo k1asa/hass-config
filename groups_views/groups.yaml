@@ -6,6 +6,13 @@ ambients:
         - sensor.ambient_humidity
         - sensor.ambient_pressure
 
+pizero:
+    name: "Pi内蔵 寝室 sensor"
+    control: hidden
+    entities:
+        - sensor.bed_bme280_temp
+        - sensor.bed_bme280_pressure
+
 k1_phone:
     name: "K1 Phone"
     entities:
@@ -42,7 +49,7 @@ Sun_Moon:
         - sensor.solar_angle
         - sensor.sunrise
         - sensor.sunset
-        - sensor.moon
+        - sensor.moon_template
         - sensor.season_template
 
 Netspeed:
@@ -105,6 +112,7 @@ pingPCs:
 Aircon1:
     name: "リビングエアコン"
     entities:
+        - switch.aircon_living
         - sensor.P1_Energy_today
         - sensor.P1_Energy_yesterday
         - sensor.P1_Energy_total
@@ -112,9 +120,11 @@ Aircon1:
         - sensor.P1_Power
         - sensor.P1_Voltage
         - sensor.P1_Current
+
 Aircon2:
     name: "ベッドエアコン"
     entities:
+        - switch.aircon_bed
         - sensor.P2_Energy_today
         - sensor.P2_Energy_yesterday
         - sensor.P2_Energy_total
@@ -122,3 +132,43 @@ Aircon2:
         - sensor.P2_Power
         - sensor.P2_Voltage
         - sensor.P2_Current
+
+darksky:
+    name: "dark_sky"
+    entities:
+        - sensor.dark_sky_summary
+        - sensor.dark_sky_daily_summary
+        - sensor.dark_sky_hourly_summary
+        - sensor.dark_sky_temperature
+        - sensor.dark_sky_daytime_high_temperature
+        - sensor.dark_sky_overnight_low_temperature
+        - sensor.dark_sky_humidity
+        - sensor.dark_sky_precip
+        - sensor.dark_sky_precip_probability
+        - sensor.dark_sky_pressure
+        - sensor.dark_sky_wind_speed
+        - sensor.dark_sky_uv_index
+
+
+#yweather:
+#    name: "Y!weather"
+#    entities:
+#        - sensor.yweather_current
+#        - sensor.yweather_humidity
+#        - sensor.yweather_pressure
+#        - sensor.yweather_temperature
+#        - sensor.yweather_temperature_max
+#        - sensor.yweather_temperature_min
+#        - sensor.yweather_wind_speed
+
+
+OWM:
+    name: "OpenWeather"
+    entities:
+        - sensor.owm_condition
+        - sensor.owm_humidity
+        - sensor.owm_pressure
+        - sensor.owm_rain
+        - sensor.owm_snow
+        - sensor.owm_temperature
+        - sensor.owm_wind_speed

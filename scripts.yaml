@@ -56,15 +56,15 @@ light_bed_off:
 aircon_living:
   sequence:
   - service: rest_command.aircon_living
-    data:
-      temp: >-
+    data_template:
+      temp: >
         {% if is_state('sensor.season', 'summer')%}1{% elif is_state('sensor.season', 'winter')%}-1{%else%}0{%endif%}
 
 aircon_bed:
   sequence:
   - service: rest_command.aircon_bed
-    data:
-      temp: >-
+    data_template:
+      temp: >
         {% if is_state('sensor.season', 'summer')%}1{% elif is_state('sensor.season', 'winter')%}-1{%else%}0{%endif%}
 
 aircon_bed_off:

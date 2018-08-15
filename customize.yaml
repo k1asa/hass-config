@@ -2,33 +2,30 @@
 # 各種センサーなどのアイコンや種別変更
 ######################
 
-sensor.nremo0_humidity:
-  device_class: humidity
-sensor.nremo1_humidity:
-  device_class: humidity
+sensor.ambient_temperature:
+  friendly_name: 'living280 室温'
+
 sensor.ambient_humidity:
   device_class: humidity
-  friendly_name: "湿度"
+  friendly_name: 'living280 湿度'
 sensor.yr_24hr_humidity:
-  friendly_name: "湿度"
+  friendly_name: '湿度'
   device_class: humidity
 sensor.yr_now_humidity:
-  friendly_name: "湿度"
+  friendly_name: '湿度'
   device_class: humidity
 
-sensor.nremo0_ilmi:
-  device_class: illuminance
-sensor.nremo1_ilmi:
-  device_class: illuminance
+
 
 sensor.ambient_pressure:
   icon: mdi:nature
+  friendly_name: 'living280 気圧'
 sensor.yr_24hr_pressure:
   icon: mdi:nature
-  friendly_name: "気圧"
+  friendly_name: '気圧'
 sensor.yr_now_pressure:
   icon: mdi:nature
-  friendly_name: "気圧"
+  friendly_name: '気圧'
 
 sensor.speedtest_download:
   icon: mdi:download
@@ -38,59 +35,62 @@ sensor.speedtest_ping:
   icon: mdi:speedometer
 sensor.connected_clients:
   icon: mdi:account-multiple
-sensor.sunrise:
-  icon: mdi:weather-sunset-up
-sensor.sunset:
-  icon: mdi:weather-sunset-down
-sensor.solar_angle:
-  icon: mdi:gauge
+
 sensor.current_version:
   icon: mdi:desktop-tower
-sensor.ay_lastupdate:
-  icon: mdi:update
-sensor.k1_lastupdate:
-  icon: mdi:update
+
+  
+sensor.yr_now_symbol:
+  friendly_name: '天気'
+sensor.yr_24hr_symbol:
+  friendly_name: '天気'
+sensor.yr_now_temperature:
+  friendly_name: '気温'
+sensor.yr_24hr_temperature:
+  friendly_name: '気温'
 sensor.yr_24hr_wind_speed:
   icon: mdi:weather-windy
-  friendly_name: "風速"
+  friendly_name: '風速'
 sensor.yr_now_wind_speed:
   icon: mdi:weather-windy
-  friendly_name: "風速"
+  friendly_name: '風速'
 sensor.yr_24hr_precipitation:
   icon: mdi:cup-water
-  friendly_name: "降水量"
+  friendly_name: '降水量'
 sensor.yr_now_precipitation:
   icon: mdi:cup-water
-  friendly_name: "降水量"
-sensor.p1_current:
-  icon: mdi:flash-auto
-sensor.p2_current:
-  icon: mdi:flash-auto
-sensor.p1_voltage:
-  icon: mdi:flash
-sensor.p2_voltage:
-  icon: mdi:flash
-sensor.p1_power:
-  icon: mdi:flash-circle
-sensor.p2_power:
-  icon: mdi:flash-circle
-sensor.p1_energy_total:
-  icon: mdi:beaker
-sensor.p1_energy_yesterday:
-  icon: mdi:beaker
-sensor.p1_energy_today:
-  icon: mdi:beaker
-sensor.p2_energy_total:
-  icon: mdi:beaker
-sensor.p2_energy_yesterday:
-  icon: mdi:beaker
-sensor.p2_energy_today:
-  icon: mdi:beaker
+  friendly_name: '降水量'
 
 sensor.sonytabletp_battery_level:
-  friendly_name: "電池残量"
+  friendly_name: '電池残量'
 sensor.ayano0720_battery_level_2:
-  friendly_name: "電池残量"
+  friendly_name: '電池残量'
+
+sensor.P1_Energy_today:
+  friendly_name: '今日の積算使用量'
+sensor.P1_Energy_yesterday:
+  friendly_name: '昨日の積算使用量'
+sensor.P1_Energy_total:
+  friendly_name: '今月の積算使用量'
+sensor.P1_Power:
+  friendly_name: '瞬間消費電力'
+sensor.P1_Voltage:
+  friendly_name: '電圧'
+sensor.P1_Current:
+  friendly_name: '瞬間消費電流'
+sensor.P2_Energy_today:
+  friendly_name: '今日の積算使用量'
+sensor.P2_Energy_yesterday:
+  friendly_name: '昨日の積算使用量'
+sensor.P2_Energy_total:
+  friendly_name: '今月の積算使用量'
+sensor.P2_Power:
+  friendly_name: '瞬間消費電力'
+sensor.P2_Voltage:
+  friendly_name: '電圧'
+sensor.P2_Current:
+  friendly_name: '瞬間消費電流'
+
 
 
 

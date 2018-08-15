@@ -55,6 +55,7 @@
 
 
 
+
   exclude:
     domains:
       - automation
@@ -96,3 +97,5 @@
       - sensor.p2_energy_today
       - sensor.p2_voltage
       - sensor.p2_current
+      - sensor.bed_bme280_pressure
+      - sensor.bed_bme280_temp

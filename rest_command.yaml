@@ -79,27 +79,32 @@ light_bed_night:
 aircon_bed:
   url: 'https://api.nature.global/1/appliances/0468a2b3-128d-4ac7-b207-684f2d5761cb/aircon_settings'
   method: POST
+  content_type: 'application/x-www-form-urlencoded'
   headers:
     Authorization: !secret nature_key
-  payload: '{"temperature":"{{ temp }}","operation_mode":"auto","air_volume":"auto","button":""}'
+  payload: 'temperature={{ temp }}'
 
 aircon_living:
   url: 'https://api.nature.global/1/appliances/62b31dc4-de9a-4fdf-a6cc-495e65f0df7a/aircon_settings'
+  content_type: 'application/x-www-form-urlencoded'
   method: POST
   headers:
     Authorization: !secret nature_key
-  payload: '{"temperature":"{{ temp }}","operation_mode":"auto","air_volume":"auto","button":""}'
+  payload: 'temperature={{ temp }}'
 
 aircon_bed_off:
   url: 'https://api.nature.global/1/appliances/0468a2b3-128d-4ac7-b207-684f2d5761cb/aircon_settings'
   method: POST
+  content_type: 'application/x-www-form-urlencoded'
   headers:
     Authorization: !secret nature_key
-  payload: '{"temperature":"","operation_mode":"","air_volume":"","button":"power-off"}'
+  payload: button=power-off
 
 aircon_living_off:
   url: 'https://api.nature.global/1/appliances/62b31dc4-de9a-4fdf-a6cc-495e65f0df7a/aircon_settings'
+  content_type: 'application/x-www-form-urlencoded'
   method: POST
   headers:
     Authorization: !secret nature_key
-  payload: '{"temperature":"","operation_mode":"","air_volume":"","button":"power-off"}'
+  payload: button=power-off
+

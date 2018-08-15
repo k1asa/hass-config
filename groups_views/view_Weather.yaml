@@ -5,8 +5,11 @@ Weather:
     entities:
       - sensor.yr_symbol
       - group.sun_moon
-      - weather.yweather
+#      - weather.yweather
       - weather.dark_sky
       - weather.openweathermap
       - group.yr_today
       - group.yr_tommorow
+      - group.OWM
+      - group.darksky
+#      - group.yweather

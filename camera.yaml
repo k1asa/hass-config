@@ -16,6 +16,17 @@
   authentication: basic
 
 ######################
+# motion + motioneye を入れてそっちに動体検知を任せる
+######################
+- platform: mjpeg
+  name: "Bed Cam"
+  mjpeg_url: http://192.168.3.6:8081
+#  still_image_url: http://60.126.34.61:8765/picture/1/current/?_username=admin&_signature=a78c9744d485ee0b93b0b23f7687d93ab24dd9bb
+  username: !secret motion_id
+  password: !secret motion_pw
+  authentication: basic
+
+######################
 # それぞれの場所を地図で
 ######################
 - platform: generic
