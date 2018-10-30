@@ -53,6 +53,10 @@ conversation:
 frontend:
 logbook:
 zeroconf:
+logger:
+  default: warning
+  logs:
+    requests.packages.urllib3.connectionpool: critical
 updater:
   include_used_components: true
 
@@ -62,11 +66,20 @@ updater:
 ###########################################
 cloud:
 ffmpeg:
-homekit:
 ios:
 map:
 sun:
 wake_on_lan:
+
+homekit:
+  name: HA_Bridge
+  filter:
+    exclude_domains:
+    - script
+    - automation
+#    exclude_entities:
+
+  
 
 discovery:
   #enable:
@@ -85,8 +98,7 @@ weather:
     api_key: !secret darksky_key
 #  - platform: yweather
 mqtt:  #生死メッセージだけ設定
-  discovery: true
-  discovery_prefix: homeassistant
+  password: !secret http_password
   birth_message:
     topic: 'hass/status'
     payload: 'online'
@@ -140,7 +152,6 @@ sensor:
       resources:
         - type: memory_use_percent
         - type: processor_use
-        - type: disk_use_percent
         - type: last_boot
     ###########################################
     # HAの起動時間センサー
@@ -176,6 +187,9 @@ sensor:
     # pi_holeの広告ブロック数センサー
     ###########################################
     - platform: pi_hole
+      host: localhost:4865
+      monitored_conditions:
+      - ads_blocked_today
       friendly_name: '広告削除数'
     ###########################################
     # PiのGPIOにつないだI2C接続のbme280センサー
@@ -267,21 +281,21 @@ sensor:
         moon_template:
           friendly_name: 'moon'
           value_template: >-
-            {% if is_state('sensor.moon','New_moon') %}
+            {% if is_state('sensor.moon','new_moon') %}
             新月
-            {% elif is_state('sensor.moon','Waxing_crescent') %}
+            {% elif is_state('sensoraa.moon','waxing_crescent') %}
             三日月
-            {% elif is_state('sensor.moon','First_quarter') %}
+            {% elif is_state('sensor.moon','first_quarter') %}
             上弦の月
-            {% elif is_state('sensor.moon','Waxing_gibbous') %}
+            {% elif is_state('sensor.moon','waxing_gibbous') %}
             十日夜の月
-            {% elif is_state('sensor.moon','Full_moon') %}
+            {% elif is_state('sensor.moon','full_moon') %}
             満月
-            {% elif is_state('sensor.moon','Waning_gibbous') %}
+            {% elif is_state('sensor.moon','waning_gibbous') %}
             寝待月
-            {% elif is_state('sensor.moon','Last_quarter') %}
+            {% elif is_state('sensor.moon','last_quarter') %}
             下弦の月
-            {% elif is_state('sensor.moon','Waning_crescent') %}
+            {% elif is_state('sensor.moon','waning_crescent') %}
             有明月
             {% else %}
             unknown
@@ -373,73 +387,73 @@ sensor:
     - platform: mqtt
       name: 'P1_Energy_today'
       state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Today"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Today"] }}'
       unit_of_measurement: 'kWh'
       icon: mdi:beaker
     - platform: mqtt
       name: 'P1_Energy_yesterday'
       state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Yesterday"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Yesterday"] }}'
       unit_of_measurement: 'kWh'
       icon: mdi:beaker
     - platform: mqtt
       name: 'P1_Energy_total'
       state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Total"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Total"] }}'
       unit_of_measurement: 'kWh'
       icon: mdi:beaker
     - platform: mqtt
       name: 'P1_Power'
       state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Power"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Power"] }}'
       unit_of_measurement: 'W'
       icon: mdi:flash-circle
     - platform: mqtt
       name: 'P1_Voltage'
       state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Voltage"] }}'
       unit_of_measurement: 'V'
       icon: mdi:flash
     - platform: mqtt
       name: 'P1_Current'
       state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Current"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Current"] }}'
       unit_of_measurement: 'A'
       icon: mdi:flash-auto
     - platform: mqtt
       name: 'P2_Energy_today'
       state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Today"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Today"] }}'
       unit_of_measurement: 'kWh'
       icon: mdi:beaker
     - platform: mqtt
       name: 'P2_Energy_yesterday'
       state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Yesterday"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Yesterday"] }}'
       unit_of_measurement: 'kWh'
       icon: mdi:beaker
     - platform: mqtt
       name: 'P2_Energy_total'
       state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Total"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Total"] }}'
       unit_of_measurement: 'kWh'
       icon: mdi:beaker
     - platform: mqtt
       name: 'P2_Power'
       state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Power"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Power"] }}'
       unit_of_measurement: 'W'
       icon: mdi:flash-circle
     - platform: mqtt
       name: 'P2_Voltage'
       state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Voltage"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Voltage"] }}'
       unit_of_measurement: 'V'
       icon: mdi:flash
     - platform: mqtt
       name: 'P2_Current'
       state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["ENERGY"]["Current"] }}'
+      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Current"] }}'
       unit_of_measurement: 'A'
       icon: mdi:flash-auto
     - platform: template
@@ -541,13 +555,13 @@ sensor:
       value_template: '{{ value_json["temperature"] }}'
       unit_of_measurement: '°C'
       device_class: temperature
-    - platform: mqtt
-      name: 'bed_bme280_pressure'
-      state_topic: 'tele/bed_bme280/sensor'
-      value_template: '{{ value_json["pressure"] }}'
-      unit_of_measurement: 'mb'
-      icon: mdi:nature
-      friendly_name: 'bed280 気圧'
+#    - platform: mqtt
+#      name: 'bed_bme280_pressure'
+#      state_topic: 'tele/bed_bme280/sensor'
+#      value_template: '{{ value_json["pressure"] }}'
+#      unit_of_measurement: 'mb'
+#      icon: mdi:nature
+#      friendly_name: 'bed280 気圧'
 
 light:
     ###########################################

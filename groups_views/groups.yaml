@@ -22,7 +22,7 @@ k1_phone:
 ay_phone:
     name: "Ay Phone"
     entities:
-        - sensor.ayano0720_battery_level_2
+        - sensor.ayano0720_battery_level
         - sensor.ay_phone_battery_state
 
 presences:

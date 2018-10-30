@@ -17,7 +17,9 @@ default_view:
       - media_player._2
       - media_player.mini_2
       - media_player.mini
+      - media_player.ps4
       - light.living
       - light.dining
       - light.bed
       - history_graph.lock
+      - camera.bed_cam

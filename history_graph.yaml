@@ -4,8 +4,9 @@ gr1:
   refresh: 300
   entities:
     - sensor.ambient_temperature
-    - sensor.nremo0_temp
-    - sensor.nremo1_temp
+    - sensor.bed_bme280_temp
+#    - sensor.nremo0_temp
+#    - sensor.nremo1_temp
 
 gr2:
   name: humidity
@@ -13,8 +14,8 @@ gr2:
   refresh: 300
   entities:
     - sensor.ambient_humidity
-    - sensor.nremo0_humidity
-    - sensor.nremo1_humidity
+#    - sensor.nremo0_humidity
+#    - sensor.nremo1_humidity
 
 gr3:
   name: iluminate

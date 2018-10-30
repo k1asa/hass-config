@@ -34,7 +34,7 @@
   initial_state: true
   trigger:
     platform: zone
-    entity_id: device_tracker.ay_phone
+    entity_id: device_tracker.ayano0720
     zone: zone.office_a
     event: leave
   action:
@@ -66,7 +66,7 @@
   initial_state: true
   trigger:
     platform: zone
-    entity_id: device_tracker.ay_phone
+    entity_id: device_tracker.ayano0720
     zone: zone.ikuta
     event: enter
   action:
@@ -99,7 +99,7 @@
   initial_state: true
   trigger:
     platform: zone
-    entity_id: device_tracker.ay_phone
+    entity_id: device_tracker.ayano0720
     zone: zone.home
     event: enter
   action:
@@ -140,14 +140,14 @@
   action:
   - service: switch.turn_on
     data:
-      entity_id: switch.sonoff1
+      entity_id: switch.sonoff4
   - service: script.notify_line_log
     data: 
       value1: "湯沸しon"
   - delay: 01:00:00
   - service: switch.turn_off
     data:
-      entity_id: switch.sonoff1
+      entity_id: switch.sonoff4
   - data: 
       value1: "湯沸しoff"
     service: script.notify_line_log
