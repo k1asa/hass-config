@@ -1,7 +1,7 @@
 System:
     name: "System"
     icon: mdi:raspberrypi
-    view: yes
+    view: true
     entities:
       - group.system_status
       - group.netspeed

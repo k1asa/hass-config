@@ -16,14 +16,20 @@ pizero:
 k1_phone:
     name: "K1 Phone"
     entities:
-        - sensor.sonytabletp_battery_level
-        - sensor.k1_phone_battery_state
+#        - sensor.k1_phone_battery_level
+        - sensor.mi_nosheng_battery_level
+        - sensor.mi_nosheng_battery_state
+#        - sensor.k1_phone_battery_state
+        - sensor.k1_lastupdate
 
 ay_phone:
     name: "Ay Phone"
     entities:
+#        - sensor.ay_phone_battery_level
+#        - sensor.ay_phone_battery_state
         - sensor.ayano0720_battery_level
-        - sensor.ay_phone_battery_state
+        - sensor.ayano0720_battery_state
+        - sensor.ay_lastupdate
 
 presences:
     name: "現在地"
@@ -62,16 +68,16 @@ Netspeed:
 nremo_living:
     name: "リビング 環境"
     entities:
-        - sensor.nremo0_temp
-        - sensor.nremo0_humidity
-        - sensor.nremo0_ilmi
+        - sensor.nremo_0_il
+        - sensor.nremo_0_te
+        - sensor.nremo_0_hu
 
 nremo_bed:
     name: "寝室 環境"
     entities:
-        - sensor.nremo1_temp
-        - sensor.nremo1_humidity
-        - sensor.nremo1_ilmi
+        - sensor.nremo_1_il
+        - sensor.nremo_1_te
+        - sensor.nremo_1_hu
 
 pi_hole:
     name: "Pi Ads Hole"

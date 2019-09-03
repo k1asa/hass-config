@@ -1,6 +1,6 @@
 Weather:
     name: weather
-    view: yes
+    view: true
     icon: mdi:weather-partlycloudy
     entities:
       - sensor.yr_symbol

@@ -1,6 +1,6 @@
 People:
     name: People
-    view: yes
+    view: true
     icon: mdi:account-multiple
     entities:
       - group.presences

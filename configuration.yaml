@@ -9,41 +9,33 @@ homeassistant:
 ######################
 # 基本セクション
 ######################
-  # Name of the location where Home Assistant is running
-  name: hassio
-  # Location required to calculate the time the sun rises and sets
-  latitude: !secret latitude
-  longitude: !secret longitude
-  # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: !secret elevation
-  # metric for Metric, imperial for Imperial
-  unit_system: metric
-  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: Asia/Tokyo
   # Customization file
   customize: !include customize.yaml
   
   whitelist_external_dirs:
+  
+  packages: !include_dir_named packages
 
 ######################
-# HA管理画面の左フレームへショートカット作成
+# 認証プロバイダ
 ######################
-panel_iframe:
-  mdiindex:
-    title: MDI Icon Index
-    icon: mdi:vector-square
-    url: https://cdn.rawgit.com/james-fry/home-assistant-mdi/efd95d7a/home-assistant-mdi.html
+#  auth_providers:
+#   - type: legacy_api_password
+#     api_password: !secret http_password
 
 ######################
 # 管理画面設定
 ######################
 http:
-  api_password: !secret http_password
   ssl_certificate: /ssl/fullchain.pem
   ssl_key: /ssl/privkey.pem
   base_url: !secret base_url
   ip_ban_enabled: true
   login_attempts_threshold: 10
+  cors_allowed_origins:
+    - https://cast.home-assistant.io
+    - http://192.168.3.5:8080
+    - http://192.168.3.3:8080
 
 ###########################################
 # Core Components
@@ -53,6 +45,8 @@ conversation:
 frontend:
 logbook:
 zeroconf:
+
+system_health:
 logger:
   default: warning
   logs:
@@ -66,45 +60,47 @@ updater:
 ###########################################
 cloud:
 ffmpeg:
-ios:
 map:
+ios:
 sun:
 wake_on_lan:
+person: 
 
 homekit:
   name: HA_Bridge
   filter:
     exclude_domains:
-    - script
-    - automation
-#    exclude_entities:
+    - scriptmh
+    exclude_entities:
+    - sensor.yr_24hr_temperature
+    - sensor.yr_now_temperature
+    - sensor.yr_now_humidity
+    - sensor.yr_24hr_humidity
+    - sensor.dark_sky_temperature
+    - sensor.owm_temperature
 
-  
+hacs:
+  token: !secret github_token
 
 discovery:
   #enable:
   #  - homekit
 lock:
   - platform: sesame
-    email: !secret sesame_id
-    password: !secret sesame_pass
+    api_key: !secret sesame_key
+
 tts:
-  - platform: google
+  - platform: google_translate
+    service_name: google_say
     language: 'ja'
-weather:
-  - platform: openweathermap
-    api_key: !secret openweathermap_key
-  - platform: darksky
-    api_key: !secret darksky_key
-#  - platform: yweather
-mqtt:  #生死メッセージだけ設定
-  password: !secret http_password
-  birth_message:
-    topic: 'hass/status'
-    payload: 'online'
-  will_message:
-    topic: 'hass/status'
-    payload: 'offline'
+    base_url: https://192.168.3.5:8123
+
+
+#mqtt:
+#  broker: !secret CLOUDMQTT_SERVER
+#  port: !secret CLOUDMQTT_PORT
+#  username: !secret CLOUDMQTT_USER
+#  password: !secret CLOUDMQTT_PASSWORD
 
 ###########################################
 # Includes
@@ -118,7 +114,6 @@ history: !include history.yaml
 media_player: !include media_player.yaml
 notify: !include notify.yaml
 script: !include scripts.yaml
-zone: !include zones.yaml
 history_graph: !include history_graph.yaml
 rest_command: !include rest_command.yaml
 binary_sensor: !include binary_sensor.yaml
@@ -131,6 +126,13 @@ ifttt:
 
 device_tracker:
 
+#life360:
+#  accounts:
+#    - username: !secret life360_username
+#      password: !secret life360_password
+#  circles:
+#    include: [Family]
+
 ###########################################
 # 未整理
 ###########################################
@@ -138,324 +140,102 @@ device_tracker:
 
 sensor:
     ###########################################
-    # APIに何人ぶら下がってるか？
+    # Xboxセンサー
     ###########################################
-    - platform: api_streams
-    ###########################################
-    # version確認センサー
-    ###########################################
-    - platform: version
-    ###########################################
-    # システムモニターセンサー
-    ###########################################
-    - platform: systemmonitor
-      resources:
-        - type: memory_use_percent
-        - type: processor_use
-        - type: last_boot
-    ###########################################
-    # HAの起動時間センサー
-    ###########################################
-    - platform: uptime
-      friendly_name: '稼働日数'
-    ###########################################
-    # YRウェザー取得センサー
-    ###########################################
-    - platform: yr
-      name: Yr_now
-      forecast: 0
-      monitored_conditions:
-        - temperature
-        - symbol
-        - precipitation
-        - windSpeed
-        - pressure
-        - humidity
-        - cloudiness
-    - platform: yr
-      name: Yr_24hr
-      forecast: 24
-      monitored_conditions:
-        - temperature
-        - symbol
-        - precipitation
-        - windSpeed
-        - pressure
-        - humidity
-        - cloudiness
-    ###########################################
-    # pi_holeの広告ブロック数センサー
-    ###########################################
-    - platform: pi_hole
-      host: localhost:4865
-      monitored_conditions:
-      - ads_blocked_today
-      friendly_name: '広告削除数'
+    - platform: xbox_live
+      api_key: !secret xboxapi
+      xuid:
+        - 2797995304216926
+
     ###########################################
     # PiのGPIOにつないだI2C接続のbme280センサー
     ###########################################
     - platform: bme280
       name: Ambient
-      i2c_address: 0x76
-      operation_mode: 2  # forced mode
-      time_standby: 5
-      oversampling_temperature: 4
-      oversampling_pressure: 4
-      oversampling_humidity: 4
-      delta_temperature: -0.5
+#      operation_mode: 2  # forced mode
+#      time_standby: 5
+#      oversampling_temperature: 4
+#      oversampling_pressure: 4
+#      oversampling_humidity: 4
+#      delta_temperature: -0.5
       monitored_conditions:
         - temperature
         - humidity
         - pressure
-      scan_interval: 180
-    ###########################################
-    # device_trackerの属性値から引っ張る更新日時センサー
-    ###########################################
-    - platform: template
-      sensors:
-        ay_lastupdate:
-          friendly_name: 'lastupdate'
-          value_template: '{{ as_timestamp(states.device_tracker.ay_phone.last_updated )|timestamp_custom("%Y-%m-%d %H:%M:%S") }}'
-          icon_template: mdi:update
+#      scan_interval: 180
 
-    - platform: template
-      sensors:
-        k1_lastupdate:
-          friendly_name: 'lastupdate'
-          value_template: '{{ as_timestamp(states.device_tracker.k1_phone.last_updated )|timestamp_custom("%Y-%m-%d %H:%M:%S") }}'
-          icon_template: mdi:update
 
-    ###########################################
-    # 日の出、日の入り算出センサー
-    ###########################################
-    - platform: template
-      sensors:
-        day_night:
-          friendly_name: 'Day/Night'
-          value_template: '{% if is_state("sun.sun", "above_horizon") %}Day{% else %}Night{% endif %}'
-          icon_template: '{% if is_state("sun.sun", "above_horizon") %}mdi:weather-sunny{% else %}mdi:weather-night{% endif %}'
 
-    - platform: template
-      sensors:
-        solar_angle:
-          value_template: '{{ states.sun.sun.attributes.elevation }}'
-          friendly_name: 'Solar Angle'
-          unit_of_measurement: 'degrees'
-          icon_template: mdi:gauge
-        sunrise:
-          value_template: '{{ ((as_timestamp(states.sun.sun.attributes.next_rising)) | timestamp_local) [11:16] }} am'
-          friendly_name: '日昇'
-          icon_template: mdi:weather-sunset-up
-        sunset:
-          value_template: '{{ ((as_timestamp(states.sun.sun.attributes.next_setting)-(43200)) | timestamp_local) [11:16] }} pm'
-          friendly_name: '日没'
-          icon_template: mdi:weather-sunset-down
-    ###########################################
-    # Speedtest.netでの速度計測を定期的に行い記録する。
-    #  混雑時間帯など把握できたらと思って設置
-    ###########################################
-    - platform: speedtest
-      server_id: 6087
-      hour:
-        - 0
-        - 3
-        - 6
-        - 9
-        - 12
-        - 15
-        - 18
-        - 21
-      monitored_conditions:
-        - ping
-        - download
-        - upload
-    ###########################################
-    # 月の満ち欠けセンサー(英語)
-    ###########################################
-    - platform: moon
-    ###########################################
-    # 月の満ち欠けセンサー(日本語)
-    ###########################################
-    - platform: template
-      sensors:
-        moon_template:
-          friendly_name: 'moon'
-          value_template: >-
-            {% if is_state('sensor.moon','new_moon') %}
-            新月
-            {% elif is_state('sensoraa.moon','waxing_crescent') %}
-            三日月
-            {% elif is_state('sensor.moon','first_quarter') %}
-            上弦の月
-            {% elif is_state('sensor.moon','waxing_gibbous') %}
-            十日夜の月
-            {% elif is_state('sensor.moon','full_moon') %}
-            満月
-            {% elif is_state('sensor.moon','waning_gibbous') %}
-            寝待月
-            {% elif is_state('sensor.moon','last_quarter') %}
-            下弦の月
-            {% elif is_state('sensor.moon','waning_crescent') %}
-            有明月
-            {% else %}
-            unknown
-            {% endif %}
-
-    ###########################################
-    # 「今は夏ですｷﾘｯ」って教えてくれるセンサー
-    ###########################################
-    - platform: season
-      type: astronomical
-
-    ###########################################
-    # 「今は夏ですｷﾘｯ」って教えてくれるしアイコンも変わるセンサー
-    ###########################################
-    - platform: template
-      sensors:
-        season_template:
-          friendly_name: 'Season'
-          value_template: >-
-            {%- if is_state("sensor.season", "spring") %}
-              Spring
-            {%- elif is_state("sensor.season", "summer") %}
-              Summer
-            {%- elif is_state("sensor.season", "autumn") %}
-              Autumn
-            {%- elif is_state("sensor.season", "winter") %}
-              Winter
-            {% else %}
-              None
-            {% endif %}
-          icon_template: >-
-            {%- if is_state("sensor.season_template", "Spring") %}
-              mdi:weather-sunset
-            {%- elif is_state("sensor.season_template", "Summer") %}
-              mdi:weather-sunny
-            {%- elif is_state("sensor.season_template", "Autumn") %}
-              mdi:leaf
-            {%- elif is_state("sensor.season_template", "Winter") %}
-              mdi:weather-snowy
-            {% else %}
-              mdi:weather-snowy-rainy
-            {% endif %}
     ###########################################
     # nature Remoから室温と湿度と照度センサー読み出し
     ###########################################
-    - platform: jsonrest
-      resource: https://api.nature.global/1/devices
-      name: nremo_json
+    - platform: rest
+      resource: https://api.nature.global/1/devices/
+      name: nremo_0_hu
+      device_class: humidity
+      unit_of_measurement: '%'
+      value_template: '{{value_json[0].newest_events.hu.val}}'
       headers:
         Authorization: !secret nature_key
-      scan_interval: 150
+      scan_interval: 120
       force_update: true
-    - platform: template
-      sensors:
-        nremo0_temp:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name|replace("remo-","") }} 室温'
-          value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.te.val }}'
-          unit_of_measurement: '°C'
-          device_class: temperature
-        nremo0_humidity:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name|replace("remo-","") }} 湿度'
-          value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.hu.val }}'
-          unit_of_measurement: '%'
-          device_class: humidity
-        nremo0_ilmi:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[0].name|replace("remo-","") }} 照度'
-          value_template: '{{ states.sensor.nremo_json.attributes.list[0].newest_events.il.val }}'
-          unit_of_measurement: 'lx'
-          device_class: illuminance
-        nremo1_temp:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name|replace("remo-","") }} 室温'
-          value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.te.val }}'
-          unit_of_measurement: '°C'
-          device_class: temperature
-        nremo1_humidity:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name|replace("remo-","") }} 湿度'
-          value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.hu.val }}'
-          unit_of_measurement: '%'
-          device_class: humidity
-        nremo1_ilmi:
-          friendly_name_template: '{{ states.sensor.nremo_json.attributes.list[1].name|replace("remo-","") }} 照度'
-          value_template: '{{ states.sensor.nremo_json.attributes.list[1].newest_events.il.val }}'
-          unit_of_measurement: 'lx'
-          device_class: illuminance
+
+    - platform: rest
+      resource: https://api.nature.global/1/devices/
+      name: nremo_0_il
+      device_class: illuminance
+      value_template: '{{value_json[0].newest_events.il.val}}'
+      headers:
+        Authorization: !secret nature_key
+      scan_interval: 120
+      force_update: true
+
+    - platform: rest
+      resource: https://api.nature.global/1/devices/
+      name: nremo_0_te
+      value_template: '{{value_json[0].newest_events.te.val}}'
+      unit_of_measurement: "°C"
+      headers:
+        Authorization: !secret nature_key
+      device_class: temperature
+      scan_interval: 120
+      force_update: true
+
+    - platform: rest
+      resource: https://api.nature.global/1/devices/
+      name: nremo_1_hu
+      device_class: humidity
+      unit_of_measurement: '%'
+      value_template: '{{value_json[1].newest_events.hu.val}}'
+      headers:
+        Authorization: !secret nature_key
+      scan_interval: 120
+      force_update: true
+
+    - platform: rest
+      resource: https://api.nature.global/1/devices/
+      name: nremo_1_il
+      device_class: illuminance
+      value_template: '{{value_json[1].newest_events.il.val}}'
+      headers:
+        Authorization: !secret nature_key
+      scan_interval: 120
+      force_update: true
+
+    - platform: rest
+      resource: https://api.nature.global/1/devices/
+      name: nremo_1_te
+      device_class: temperature
+      unit_of_measurement: "°C"
+      value_template: '{{value_json[1].newest_events.te.val}}'
+      headers:
+        Authorization: !secret nature_key
+      scan_interval: 120
+      force_update: true
 
     ###########################################
     # Sonoff Pow から値読み出し
     ###########################################
-    - platform: mqtt
-      name: 'P1_Energy_today'
-      state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Today"] }}'
-      unit_of_measurement: 'kWh'
-      icon: mdi:beaker
-    - platform: mqtt
-      name: 'P1_Energy_yesterday'
-      state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Yesterday"] }}'
-      unit_of_measurement: 'kWh'
-      icon: mdi:beaker
-    - platform: mqtt
-      name: 'P1_Energy_total'
-      state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Total"] }}'
-      unit_of_measurement: 'kWh'
-      icon: mdi:beaker
-    - platform: mqtt
-      name: 'P1_Power'
-      state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Power"] }}'
-      unit_of_measurement: 'W'
-      icon: mdi:flash-circle
-    - platform: mqtt
-      name: 'P1_Voltage'
-      state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Voltage"] }}'
-      unit_of_measurement: 'V'
-      icon: mdi:flash
-    - platform: mqtt
-      name: 'P1_Current'
-      state_topic: 'tele/sonoffP1/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Current"] }}'
-      unit_of_measurement: 'A'
-      icon: mdi:flash-auto
-    - platform: mqtt
-      name: 'P2_Energy_today'
-      state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Today"] }}'
-      unit_of_measurement: 'kWh'
-      icon: mdi:beaker
-    - platform: mqtt
-      name: 'P2_Energy_yesterday'
-      state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Yesterday"] }}'
-      unit_of_measurement: 'kWh'
-      icon: mdi:beaker
-    - platform: mqtt
-      name: 'P2_Energy_total'
-      state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Total"] }}'
-      unit_of_measurement: 'kWh'
-      icon: mdi:beaker
-    - platform: mqtt
-      name: 'P2_Power'
-      state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Power"] }}'
-      unit_of_measurement: 'W'
-      icon: mdi:flash-circle
-    - platform: mqtt
-      name: 'P2_Voltage'
-      state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Voltage"] }}'
-      unit_of_measurement: 'V'
-      icon: mdi:flash
-    - platform: mqtt
-      name: 'P2_Current'
-      state_topic: 'tele/sonoffP2/SENSOR'
-      value_template: '{{ value_json["StatusSNS"]["ENERGY"]["Current"] }}'
-      unit_of_measurement: 'A'
-      icon: mdi:flash-auto
     - platform: template
       sensors:
         p2_price:
@@ -463,94 +243,27 @@ sensor:
           unit_of_measurement: '円'
           icon_template: mdi:currency-jpy
           value_template: >-
-            {% if is_state('sensor.p2_energy_total','unknown') %}
+            {% if is_state('sensor.sonoffp2_energy_total','unknown') %}
             0
             {% else %}
-            {{ (states('sensor.p2_energy_total')|float * 23.408 ) | round(2) }}
+            {{ (states('sensor.sonoffp2_energy_total')|float * 23.408 ) | round(2) }}
             {% endif %}
         p1_price:
           friendly_name: '電気料金概算'
           unit_of_measurement: '円'
           icon_template: mdi:currency-jpy
           value_template: >-
-            {% if is_state('sensor.p1_energy_total','unknown') %}
+            {% if is_state('sensor.sonoffp1_energy_total','unknown') %}
             0
             {% else %}
-            {{ (states('sensor.p1_energy_total')|float * 23.408 ) | round(2) }}
+            {{ (states('sensor.sonoffp1_energy_total')|float * 23.408 ) | round(2) }}
             {% endif %}
-
-    ###########################################
-    # iphone充電状態のセンサー
-    ###########################################
-    - platform: template
-      sensors:
-        ay_phone_battery_state:
-          friendly_name: '充電状態'
-          value_template: >-
-            {% if is_state('sensor.ayano0720_battery_state_2', 'Charging') %}
-            充電中
-            {% elif is_state('sensor.ayano0720_battery_state_2', 'Full') %}
-            満充電
-            {% else %}
-            放電中
-            {% endif %}
-        k1_phone_battery_state:
-          friendly_name: '充電状態'
-          value_template: >-
-            {% if is_state('sensor.sonytabletp_battery_state', 'Charging') %}
-            充電中
-            {% elif is_state('sensor.sonytabletp_battery_state', 'Full') %}
-            満充電
-            {% else %}
-            放電中
-            {% endif %}
-
-    ###########################################
-    # お天気各種センサー
-    ###########################################
-    - platform: darksky
-      api_key: !secret darksky_key
-      language: ja
-      monitored_conditions:
-      - summary
-      - precip_type
-      - precip_probability
-      - temperature
-      - wind_speed
-      - humidity
-      - pressure
-      - hourly_summary
-      - daily_summary
-      - temperature_high
-      - temperature_low
-      - uv_index
-    - platform: openweathermap
-      api_key: !secret openweathermap_key
-      language: ja
-      monitored_conditions:
-      - weather
-      - temperature
-      - wind_speed
-      - humidity
-      - pressure
-      - rain
-      - snow
-#    - platform: yweather
-#      monitored_conditions:
-#      - weather_current
-#      - temp_min
-#      - temp_max
-#      - wind_speed
-#      - pressure
-#      - humidity
-#      - temperature
 
     ###########################################
     # Pi Zero から値読み出し
     ###########################################
     - platform: mqtt
       name: 'bed_bme280_temp'
-      friendly_name: 'bed280 室温'
       state_topic: 'tele/bed_bme280/sensor'
       value_template: '{{ value_json["temperature"] }}'
       unit_of_measurement: '°C'
@@ -567,9 +280,9 @@ light:
     ###########################################
     # Nanoleaf Aurora操作
     ###########################################
-  - platform: nanoleaf_aurora
-    friendly_name: 'オーロラ'
-    host: 192.168.3.18
+  - platform: nanoleaf
+    name: 'オーロラ'
+    host: 192.168.3.19
     token: !secret aurora_token
     ###########################################
     # nRemoのScript呼び出し
@@ -599,62 +312,6 @@ light:
 
 switch:
   ###########################################
-  # MQTT経由のSonoff Basic1
-  ###########################################
-  - platform: mqtt
-    name: 'Sonoff1'
-    state_topic: 'stat/sonoff1/POWER'
-    command_topic: 'cmnd/sonoff1/POWER'
-    availability_topic: 'tele/sonoff1/LWT'
-    qos: 1
-    payload_on: 'ON'
-    payload_off: 'OFF'
-    payload_available: 'Online'
-    payload_not_available: 'Offline'
-    retain: false
-  ###########################################
-  # MQTT経由のSonoff Basic2
-  ###########################################
-  - platform: mqtt
-    name: 'Sonoff2'
-    state_topic: 'stat/sonoff2/POWER'
-    command_topic: 'cmnd/sonoff2/POWER'
-    availability_topic: 'tele/sonoff2/LWT'
-    qos: 1
-    payload_on: 'ON'
-    payload_off: 'OFF'
-    payload_available: 'Online'
-    payload_not_available: 'Offline'
-    retain: false
-  ###########################################
-  # MQTT経由のSonoff Basic3
-  ###########################################
-  - platform: mqtt
-    name: 'Sonoff3'
-    state_topic: 'stat/sonoff3/POWER'
-    command_topic: 'cmnd/sonoff3/POWER'
-    availability_topic: 'tele/sonoff3/LWT'
-    qos: 1
-    payload_on: 'ON'
-    payload_off: 'OFF'
-    payload_available: 'Online'
-    payload_not_available: 'Offline'
-    retain: false
-  ###########################################
-  # MQTT経由のSonoff Basic4
-  ###########################################
-  - platform: mqtt
-    name: 'Sonoff4'
-    state_topic: 'stat/sonoff4/POWER'
-    command_topic: 'cmnd/sonoff4/POWER'
-    availability_topic: 'tele/sonoff4/LWT'
-    qos: 1
-    payload_on: 'ON'
-    payload_off: 'OFF'
-    payload_available: 'Online'
-    payload_not_available: 'Offline'
-    retain: false
-  ###########################################
   # Windowsマシンのon/off
   #  wake on lanで起動して、pingで生死確認して、RPCshutdownで終了
   ###########################################
@@ -664,6 +321,7 @@ switch:
     mac_address: '40-8D-5C-53-16-3A'
     turn_off: 
       service: script.addon_rpcshutdown_redastray
+      
   ###########################################
   # エアコンのon/offスイッチ。script経由でrest_command操作
   ###########################################
@@ -684,3 +342,12 @@ switch:
         turn_off:
           service: script.aircon_living_off
 
+input_text:
+  ###########################################
+  # MQTT経由のSonoff Basic1
+  ###########################################
+  sendline:
+    name: send to LINE
+    min: 1
+    initial: input text
+    

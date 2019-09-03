@@ -3,11 +3,11 @@
 ######################
 
 sensor.ambient_temperature:
-  friendly_name: 'living280 室温'
+  friendly_name: '室温'
 
 sensor.ambient_humidity:
   device_class: humidity
-  friendly_name: 'living280 湿度'
+  friendly_name: '湿度'
 sensor.yr_24hr_humidity:
   friendly_name: '湿度'
   device_class: humidity
@@ -15,11 +15,9 @@ sensor.yr_now_humidity:
   friendly_name: '湿度'
   device_class: humidity
 
-
-
 sensor.ambient_pressure:
   icon: mdi:nature
-  friendly_name: 'living280 気圧'
+  friendly_name: '気圧'
 sensor.yr_24hr_pressure:
   icon: mdi:nature
   friendly_name: '気圧'
@@ -66,34 +64,46 @@ sensor.sonytabletp_battery_level:
 sensor.ayano0720_battery_level_2:
   friendly_name: '電池残量'
 
-sensor.P1_Energy_today:
+sensor.sonoffp1_energy_today:
   friendly_name: '今日の積算使用量'
-sensor.P1_Energy_yesterday:
+sensor.sonoffp1_energy_yesterday:
   friendly_name: '昨日の積算使用量'
-sensor.P1_Energy_total:
+sensor.sonoffp1_energy_total:
   friendly_name: '今月の積算使用量'
-sensor.P1_Power:
+sensor.sonoffp1_energy_power:
   friendly_name: '瞬間消費電力'
-sensor.P1_Voltage:
+sensor.sonoffp1_energy_voltage:
   friendly_name: '電圧'
-sensor.P1_Current:
+sensor.sonoffp1_energy_current:
   friendly_name: '瞬間消費電流'
-sensor.P2_Energy_today:
+sensor.sonoffp2_energy_today:
   friendly_name: '今日の積算使用量'
-sensor.P2_Energy_yesterday:
+sensor.sonoffp2_energy_yesterday:
   friendly_name: '昨日の積算使用量'
-sensor.P2_Energy_total:
+sensor.sonoffp2_energy_total:
   friendly_name: '今月の積算使用量'
-sensor.P2_Power:
+sensor.sonoffp2_energy_power:
   friendly_name: '瞬間消費電力'
-sensor.P2_Voltage:
+sensor.sonoffp2_energy_voltage:
   friendly_name: '電圧'
-sensor.P2_Current:
+sensor.sonoffp2_energy_current:
   friendly_name: '瞬間消費電流'
 
-
-
-
+zone.ikuta:
+  friendly_name: '生田駅'
+zone.kumagaya:
+  friendly_name: '熊谷駅'
+zone.home_r:
+  friendly_name: '熊谷宅'
+zone.nailr:
+  friendly_name: '新百合ヶ丘オフィス'
+zone.osaki:
+  friendly_name: '大崎オフィス'
+zone.shonan:
+  friendly_name: '湘南オフィス'
+  
+group.default_view:
+  hidden: true
 group.all_scripts:
   hidden: false
 group.all_automations:

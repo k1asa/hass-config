@@ -5,9 +5,11 @@
 - platform: pushbullet
   api_key: !secret pushbullet_key
   name: pushbullet
+  
 - platform: nfandroidtv
   name: Bravia
   host: 192.168.3.8
+
 - platform: prowl
   name: prowl
   api_key: !secret prowl_key

@@ -1,6 +1,6 @@
 Sensor:
     name: Sensors
-    view: yes
+    view: true
     icon: mdi:gauge
     entities:
       - group.presences

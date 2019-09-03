@@ -4,6 +4,8 @@
 !/custom_components
 !/groups_views
 !/sensors
+!/packages
 !/.gitignore
 /secrets.yaml
 /known_devices.yaml
+/.ios.conf

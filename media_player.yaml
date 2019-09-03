@@ -1,19 +1,13 @@
 ######################
 # media_playerコンポーネント
 ######################
-- platform: braviatv_psk
-  name: Bravia
-  host: 192.168.3.8
-  psk: sony
-  mac: a8:6b:ad:1b:eb:07
-  amp: True
-  android: True
-  #sourcefilter:
-  #  - ' HD'
-  #  - HDMI
 
-- platform: ps4
-  host: http://192.168.3.5:3031
-  ps4_ip: 192.168.3.9
-  name: PS4
-  local_store: games
+  - platform: braviatv_psk
+    host: 192.168.3.101
+    psk: sony
+    amp: True
+    android: True
+    sourcefilter:
+      - ' HD'
+      - HDMI
+    name: braviatv

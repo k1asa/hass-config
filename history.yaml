@@ -6,22 +6,21 @@
   use_include_order: True
   include:
     entities:
-      - device_tracker.ay_phone
-      - sensor.ayano0720_battery_state_2
-      - sensor.ay_lastupdate
-      - device_tracker.k1_phone
+      - sensor.tiyanrena_battery_state
+      - device_tracker.life360_reina
+      - sensor.tiyanrena_battery_level
+      - device_tracker.life360_k1asa
       - sensor.sonytabletp_battery_state
-      - sensor.k1_lastupdate
-      - lock.sesamea
+      - sensor.sonytabletp_battery_level
+      - lock.sesame_pep
       - switch.sonoff1
       - switch.sonoff2
       - switch.sonoff3
       - switch.sonoff4
-      - light.aurora
+#      - light.aurora
       - light.living
       - light.dining
       - light.bed
-      - camera.living_cam
       - binary_sensor.blueastray
       - binary_sensor.redastray
       - binary_sensor.greenastray
@@ -29,31 +28,31 @@
       - binary_sensor.mirageastray
       - binary_sensor.mainrouter
       - binary_sensor.subrouter
-      - media_player._2
-      - media_player.bravia
-      - media_player.mini_2
-      - media_player.mini
+      - media_player.braviatv
+      - media_player.playstation_4
+      - media_player.kitutin
+      - media_player.terebi
+      - media_player.betsudorumu
+      - media_player.kitsuchin
+      - media_player.yu_shi
       - sensor.speedtest_upload
       - sensor.speedtest_download
       - sensor.p1_power
       - sensor.p2_power
       - sensor.p1_energy_total
       - sensor.p2_energy_total
-      - sensor.nremo0_ilmi
-      - sensor.nremo1_ilmi
       - sensor.ambient_temperature
-      - sensor.nremo0_temp
-      - sensor.nremo1_temp
       - sensor.ambient_pressure
       - sensor.ambient_humidity
-      - sensor.nremo0_humidity
-      - sensor.nremo1_humidity
-      - sensor.yr_now_symbol
-      - group.yweather
-      - weather.openweathermap
       - weather.dark_sky
       - sensor.bed_bme280_pressure
       - sensor.bed_bme280_temp
+      - sensor.nremo_1_hu
+      - sensor.nremo_1_il
+      - sensor.nremo_1_te
+      - sensor.nremo_0_hu
+      - sensor.nremo_0_il
+      - sensor.nremo_0_te
 
   exclude:
     domains:

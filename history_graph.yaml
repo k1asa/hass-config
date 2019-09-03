@@ -5,8 +5,8 @@ gr1:
   entities:
     - sensor.ambient_temperature
     - sensor.bed_bme280_temp
-#    - sensor.nremo0_temp
-#    - sensor.nremo1_temp
+    - sensor.nremo_0_te
+    - sensor.nremo_1_te
 
 gr2:
   name: humidity
@@ -14,20 +14,21 @@ gr2:
   refresh: 300
   entities:
     - sensor.ambient_humidity
-#    - sensor.nremo0_humidity
-#    - sensor.nremo1_humidity
+    - sensor.nremo_0_hu
+    - sensor.nremo_1_hu
+
 
 gr3:
   name: iluminate
   hours_to_show: 24
   refresh: 300
   entities:
-    - sensor.nremo0_ilmi
-    - sensor.nremo1_ilmi
+    - sensor.nremo_0_il
+    - sensor.nremo_1_il
 
 gr4:
   name: lock
   hours_to_show: 24
   refresh: 36
   entities:
-    - lock.sesamea
+    - lock.sesame_pep

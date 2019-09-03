@@ -10,12 +10,26 @@ addon_rpcshutdown_redastray:
       input: red-astray
 
 ###########################################
+# Home Assistant を 再起動
+###########################################
+hass_restart:
+  alias: Home Assistant 再起動
+  sequence:
+    - service: homeassistant.restart
+
+
+###########################################
+# Home Assistant を アップデート
+###########################################
+
+
+###########################################
 # ifttt経由でLINE_botに飛ばすスクリプト
 ###########################################
 notify_line_mtg:
   sequence:
     - service: ifttt.trigger
-      data_template: {"event":"ekolun_line", "value1":"{{ value1 }}"}
+      data_template: {"event":"pair_line", "value1":"{{ value1 }}"}
 
 notify_line_log:
   sequence:
@@ -58,14 +72,14 @@ aircon_living:
   - service: rest_command.aircon_living
     data_template:
       temp: >
-        {% if is_state('sensor.season', 'summer')%}1{% elif is_state('sensor.season', 'winter')%}-1{%else%}0{%endif%}
+        {% if is_state('sensor.season', 'summer')%}2{% elif is_state('sensor.season', 'winter')%}-2{%else%}0{%endif%}
 
 aircon_bed:
   sequence:
   - service: rest_command.aircon_bed
     data_template:
       temp: >
-        {% if is_state('sensor.season', 'summer')%}1{% elif is_state('sensor.season', 'winter')%}-1{%else%}0{%endif%}
+        {% if is_state('sensor.season', 'summer')%}2{% elif is_state('sensor.season', 'winter')%}-2{%else%}0{%endif%}
 
 aircon_bed_off:
   sequence:
