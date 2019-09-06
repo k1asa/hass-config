@@ -96,7 +96,7 @@ tts:
     base_url: https://192.168.3.5:8123
 
 
-#mqtt:
+mqtt:
 #  broker: !secret CLOUDMQTT_SERVER
 #  port: !secret CLOUDMQTT_PORT
 #  username: !secret CLOUDMQTT_USER
@@ -109,7 +109,6 @@ tts:
 ###########################################
 automation: !include automations.yaml
 camera: !include camera.yaml
-group: !include_dir_merge_named groups_views
 history: !include history.yaml
 media_player: !include media_player.yaml
 notify: !include notify.yaml
@@ -264,7 +263,7 @@ sensor:
     ###########################################
     - platform: mqtt
       name: 'bed_bme280_temp'
-      state_topic: 'tele/bed_bme280/sensor'
+      state_topic: 'bed_bme280/tele/sensor'
       value_template: '{{ value_json["temperature"] }}'
       unit_of_measurement: '°C'
       device_class: temperature
@@ -344,7 +343,7 @@ switch:
 
 input_text:
   ###########################################
-  # MQTT経由のSonoff Basic1
+  # LINE送信文
   ###########################################
   sendline:
     name: send to LINE

@@ -299,9 +299,11 @@
     data_template:
       value1: '{{ trigger.to_state }}'
 
+# GPSログ
+###########################################
 - id: r5f8s0nf40gz
   initial_state: true
-  alias: GPSlogsR
+  alias: GPSlogsR_evernote
   trigger:
   - platform: state
     entity_id: device_tracker.life360_reina
@@ -313,9 +315,24 @@
       value2: "{{ state_attr('device_tracker.life360_reina', 'longitude') }}"
       value3: "{{ state_attr('device_tracker.life360_reina', 'gps_accuracy') }}"
 
+- id: xvrde87jakre
+  initial_state: true
+  alias: GPSlogsR_Gsheet
+  trigger:
+  - platform: state
+    entity_id: device_tracker.life360_reina
+  action:
+  - service: ifttt.trigger
+    data_template:
+      event: "reina_gps_log"
+      value1: "{{ state_attr('device_tracker.life360_reina', 'latitude') }}"
+      value2: "{{ state_attr('device_tracker.life360_reina', 'longitude') }}"
+      value3: "{{ state_attr('device_tracker.life360_reina', 'gps_accuracy') }}"
+
+
 - id: z6coo1hlfika
   initial_state: true
-  alias: GPSlogsK
+  alias: GPSlogsK_evernote
   trigger:
   - platform: state
     entity_id: device_tracker.life360_k1asa
@@ -323,6 +340,20 @@
   - service: ifttt.trigger
     data_template:
       event: "k1log"
+      value1: "{{ state_attr('device_tracker.life360_k1asa', 'latitude') }}"
+      value2: "{{ state_attr('device_tracker.life360_k1asa', 'longitude') }}"
+      value3: "{{ state_attr('device_tracker.life360_k1asa', 'gps_accuracy') }}"
+
+- id: zr2x6ybb29xp
+  initial_state: true
+  alias: GPSlogsK_Gsheet
+  trigger:
+  - platform: state
+    entity_id: device_tracker.life360_k1asa
+  action:
+  - service: ifttt.trigger
+    data_template:
+      event: "k1_gps_log"
       value1: "{{ state_attr('device_tracker.life360_k1asa', 'latitude') }}"
       value2: "{{ state_attr('device_tracker.life360_k1asa', 'longitude') }}"
       value3: "{{ state_attr('device_tracker.life360_k1asa', 'gps_accuracy') }}"

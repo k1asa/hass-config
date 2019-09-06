@@ -193,6 +193,7 @@ automation:
       data:
         message: "request_location_update"
 
+
 # HomeAssistant起動時にsonoff-tasmotaへ指示
 ###########################################
   - alias: Power state on HA start-up
@@ -203,9 +204,10 @@ automation:
     action:
     - service: mqtt.publish
       data:
-        topic: cmnd/sonoffs/SetOption19
+        topic: "cmnd/sonoffs/SetOption19"
         payload: '1'
+    - delay: 00:00:30
     - service: mqtt.publish
       data:
-        topic: cmnd/sonoffs/state
+        topic: "cmnd/sonoffs/state"
         payload: ''
