@@ -6,29 +6,13 @@
 
 
 homeassistant:
-######################
-# 基本セクション
-######################
-  # Customization file
   customize: !include customize.yaml
-  
-  whitelist_external_dirs:
-  
-  packages: !include_dir_named packages
-
-######################
-# 認証プロバイダ
-######################
-#  auth_providers:
-#   - type: legacy_api_password
-#     api_password: !secret http_password
-
 ######################
 # 管理画面設定
 ######################
 http:
-  ssl_certificate: /ssl/fullchain.pem
-  ssl_key: /ssl/privkey.pem
+#  ssl_certificate: /ssl/fullchain.pem
+#  ssl_key: /ssl/privkey.pem
   base_url: !secret base_url
   ip_ban_enabled: true
   login_attempts_threshold: 10
@@ -40,82 +24,168 @@ http:
 ###########################################
 # Core Components
 ###########################################
-config:
-conversation:
-frontend:
-logbook:
-zeroconf:
-
-system_health:
-logger:
-  default: warning
-  logs:
-    requests.packages.urllib3.connectionpool: critical
-updater:
-  include_used_components: true
-
-
-###########################################
-# Simple Components
-###########################################
-cloud:
-ffmpeg:
-map:
-ios:
-sun:
-wake_on_lan:
-person: 
-
-homekit:
-  name: HA_Bridge
-  filter:
-    exclude_domains:
-    - scriptmh
-    exclude_entities:
-    - sensor.yr_24hr_temperature
-    - sensor.yr_now_temperature
-    - sensor.yr_now_humidity
-    - sensor.yr_24hr_humidity
-    - sensor.dark_sky_temperature
-    - sensor.owm_temperature
-
-hacs:
-  token: !secret github_token
-
-discovery:
-  #enable:
-  #  - homekit
-lock:
-  - platform: sesame
-    api_key: !secret sesame_key
-
-tts:
-  - platform: google_translate
-    service_name: google_say
-    language: 'ja'
-    base_url: https://192.168.3.5:8123
-
-
-mqtt:
-#  broker: !secret CLOUDMQTT_SERVER
-#  port: !secret CLOUDMQTT_PORT
-#  username: !secret CLOUDMQTT_USER
-#  password: !secret CLOUDMQTT_PASSWORD
+default_config:
 
 ###########################################
 # Includes
 #  include で他ファイルへ飛ばせる。
 #  include_dir_merge_named でフォルダ指定してすべてマージして読み込ませられる。
 ###########################################
-automation: !include automations.yaml
 camera: !include camera.yaml
 history: !include history.yaml
-media_player: !include media_player.yaml
-notify: !include notify.yaml
 script: !include scripts.yaml
-history_graph: !include history_graph.yaml
 rest_command: !include rest_command.yaml
-binary_sensor: !include binary_sensor.yaml
+automation: !include automations.yaml
+
+###########################################
+# Simple Components
+###########################################
+api:
+ffmpeg:
+wake_on_lan:
+updater:
+system_health:
+sun:
+
+cloud:
+  google_actions:
+    filter:
+      include_entities:
+        - switch.red_astray
+        - media_player.playstation_4
+      exclude_domains:
+        - light
+        - media_player
+        - script
+        - camera
+        - group
+        - switch
+        - sensor
+        - automation
+        - lock
+    entity_config:
+      switch.red_astray:
+        name: パソコン
+        aliases:
+         - メイン
+         - メインPC
+         - PC
+      media_player.playstation_4:
+        name: PlayStation4
+        aliases:
+          - プレステ
+          - プレイステーション
+          - プレステ4
+          - PS4
+
+homekit:
+  name: HA_Bridge
+  filter:
+    include_domains:
+    - light
+    - lock
+    - camera
+    - person
+    include_entities:
+    - sensor.bed_bme280_temp
+    - sensor.ambient_humidity
+    - sensor.ambient_temperature
+    - sensor.nremo_bed_hu
+    - sensor.nremo_bed_il
+    - sensor.nremo_liv_il
+    - switch.aircon_living
+    - switch.aircon_bed
+    - switch.red_astray
+    exclude_domains:
+    - sensor
+    - weather
+    - binary_sensor
+    - automation
+    # - device_tracker
+    - script
+    - group
+    - media_player
+    - switch
+    exclude_entities:
+    - light.aurora
+
+
+
+#hacs:
+#  token: !secret github_token
+
+discovery:
+lock:
+  - platform: sesame
+    api_key: !secret sesame_key
+
+tts:
+  - platform: google_translate
+    language: 'ja'
+  - platform: google_cloud
+    key_file: GoogleAsisstant-lunar-35a697f5eb58.json
+    language: ja-JP
+
+
+speedtestdotnet:
+  server_id: 14623
+  scan_interval:
+    hours: 3
+
+mqtt:
+  broker: !secret CLOUDMQTT_SERVER
+  port: !secret CLOUDMQTT_PORT
+  username: !secret CLOUDMQTT_USER
+  password: !secret CLOUDMQTT_PASSWORD
+  discovery: true
+  discovery_prefix: homeassistant
+  birth_message:
+    topic: 'hass/status'
+    payload: 'online'
+  will_message:
+    topic: 'hass/status'
+    payload: 'offline'
+
+notify: 
+#- platform: ios
+- platform: pushbullet
+  api_key: !secret pushbullet_key
+  name: pushbullet
+- platform: prowl
+  name: prowl
+  api_key: !secret prowl_key
+
+recorder:
+  exclude:
+    entities:
+      - camera.bed_cam
+      - camera.k1_map
+      - camera.living_cam
+      - camera.reina_map
+      - group.all_automations
+      - group.all_devices
+      - group.all_lights
+      - group.all_locks
+      - group.all_scripts
+      - group.all_switches
+      - input_text.sendline
+      - sensor.day_night
+      - sensor.moon_template
+      - sensor.season
+      - sun.sun
+
+###############################################################################
+#  Weather
+###############################################################################
+weather:
+  - platform: openweathermap
+    api_key: !secret openweathermap_key
+  - platform: darksky
+    api_key: !secret darksky_key
+    mode: daily
+#  - platform: yweather
+
+
 
 ###########################################
 # Third Party Platforms
@@ -124,29 +194,125 @@ ifttt:
   key: !secret ifttt_key
 
 device_tracker:
+  - platform: nmap_tracker
+    hosts:
+      - 192.168.3.0/24
+    exclude:
+     - 192.168.3.5
 
-#life360:
-#  accounts:
-#    - username: !secret life360_username
-#      password: !secret life360_password
-#  circles:
-#    include: [Family]
 
 ###########################################
-# 未整理
+# Sensor
 ###########################################
-
-
 sensor:
-    ###########################################
-    # Xboxセンサー
-    ###########################################
-    - platform: xbox_live
-      api_key: !secret xboxapi
-      xuid:
-        - 2797995304216926
 
+    # 月の満ち欠けセンサー(英語)
     ###########################################
+    - platform: moon
+
+    # 月の満ち欠けセンサー(日本語)
+    ###########################################
+    - platform: template
+      sensors:
+        moon_template:
+          friendly_name: 'moon'
+          value_template: >-
+            {% if is_state('sensor.moon','new_moon') %}
+            新月
+            {% elif is_state('sensor.moon','waxing_crescent') %}
+            三日月
+            {% elif is_state('sensor.moon','first_quarter') %}
+            上弦の月
+            {% elif is_state('sensor.moon','waxing_gibbous') %}
+            十日夜の月
+            {% elif is_state('sensor.moon','full_moon') %}
+            満月
+            {% elif is_state('sensor.moon','waning_gibbous') %}
+            寝待月
+            {% elif is_state('sensor.moon','last_quarter') %}
+            下弦の月
+            {% elif is_state('sensor.moon','waning_crescent') %}
+            有明月
+            {% else %}
+            unknown
+            {% endif %}
+
+    # 「今は夏ですｷﾘｯ」って教えてくれるセンサー
+    ###########################################
+    - platform: season
+      type: astronomical
+
+    # Darksky
+    ###########################################
+    - platform: darksky
+      api_key: !secret darksky_key
+      language: ja
+      monitored_conditions:
+      - summary
+      - temperature
+      - wind_speed
+      - humidity
+      - hourly_summary
+      - daily_summary
+      - temperature_high
+      - temperature_low
+      - uv_index
+
+
+    # 日の出/日の入
+    ###########################################
+    - platform: template
+      sensors:
+        day_night:
+          friendly_name: 'Day/Night'
+          value_template: '{% if is_state("sun.sun", "above_horizon") %}Day{% else %}Night{% endif %}'
+          icon_template: '{% if is_state("sun.sun", "above_horizon") %}mdi:weather-sunny{% else %}mdi:weather-night{% endif %}'
+
+    # 電気使用量から料金概算算出
+    ###########################################
+    - platform: template
+      sensors:
+          pliv_price:
+            friendly_name: '電気料金概算'
+            unit_of_measurement: '円'
+            icon_template: mdi:currency-jpy
+            value_template: >-
+              {% if is_state('sensor.tasmotapliv_energy_total','unknown') %}
+              0
+              {% else %}
+              {{ (states('sensor.tasmotapliv_energy_total')|float * 23.408 ) | round(2) }}
+              {% endif %}
+          pbed_price:
+            friendly_name: '電気料金概算'
+            unit_of_measurement: '円'
+            icon_template: mdi:currency-jpy
+            value_template: >-
+              {% if is_state('sensor.tasmotapbed_energy_total','unknown') %}
+              0
+              {% else %}
+              {{ (states('sensor.tasmotapbed_energy_total')|float * 23.408 ) | round(2) }}
+              {% endif %}
+          ptv_price:
+            friendly_name: '電気料金概算'
+            unit_of_measurement: '円'
+            icon_template: mdi:currency-jpy
+            value_template: >-
+              {% if is_state('sensor.tasmotaptv_energy_total','unknown') %}
+              0
+              {% else %}
+              {{ (states('sensor.tasmotaptv_energy_total')|float * 23.408 ) | round(2) }}
+              {% endif %}
+          ppc_price:
+            friendly_name: '電気料金概算'
+            unit_of_measurement: '円'
+            icon_template: mdi:currency-jpy
+            value_template: >-
+              {% if is_state('sensor.tasmotappc_energy_total','unknown') %}
+              0
+              {% else %}
+              {{ (states('sensor.tasmotappc_energy_total')|float * 23.408 ) | round(2) }}
+              {% endif %}
+
     # PiのGPIOにつないだI2C接続のbme280センサー
     ###########################################
     - platform: bme280
@@ -165,12 +331,11 @@ sensor:
 
 
 
-    ###########################################
     # nature Remoから室温と湿度と照度センサー読み出し
     ###########################################
     - platform: rest
       resource: https://api.nature.global/1/devices/
-      name: nremo_0_hu
+      name: nremo_liv_hu
       device_class: humidity
       unit_of_measurement: '%'
       value_template: '{{value_json[0].newest_events.hu.val}}'
@@ -181,7 +346,7 @@ sensor:
 
     - platform: rest
       resource: https://api.nature.global/1/devices/
-      name: nremo_0_il
+      name: nremo_liv_il
       device_class: illuminance
       value_template: '{{value_json[0].newest_events.il.val}}'
       headers:
@@ -191,7 +356,7 @@ sensor:
 
     - platform: rest
       resource: https://api.nature.global/1/devices/
-      name: nremo_0_te
+      name: nremo_liv_te
       value_template: '{{value_json[0].newest_events.te.val}}'
       unit_of_measurement: "°C"
       headers:
@@ -202,7 +367,7 @@ sensor:
 
     - platform: rest
       resource: https://api.nature.global/1/devices/
-      name: nremo_1_hu
+      name: nremo_bed_hu
       device_class: humidity
       unit_of_measurement: '%'
       value_template: '{{value_json[1].newest_events.hu.val}}'
@@ -213,7 +378,7 @@ sensor:
 
     - platform: rest
       resource: https://api.nature.global/1/devices/
-      name: nremo_1_il
+      name: nremo_bed_il
       device_class: illuminance
       value_template: '{{value_json[1].newest_events.il.val}}'
       headers:
@@ -223,7 +388,7 @@ sensor:
 
     - platform: rest
       resource: https://api.nature.global/1/devices/
-      name: nremo_1_te
+      name: nremo_bed_te
       device_class: temperature
       unit_of_measurement: "°C"
       value_template: '{{value_json[1].newest_events.te.val}}'
@@ -232,33 +397,80 @@ sensor:
       scan_interval: 120
       force_update: true
 
-    ###########################################
-    # Sonoff Pow から値読み出し
-    ###########################################
+      # rpi_起動時間
+      ###########################################
+    - platform: uptime
+      name: Home Assistant Up Time
+      unit_of_measurement: hours
+  
+      # rpi_外部IP
+      ###########################################
+    - platform: rest
+      resource: http://icanhazip.com
+      name: external_ip
+      value_template: '{{ value }}'
+      scan_interval: 86400
+  
+      # rpi_各ステータス
+      ###########################################
+    - platform: systemmonitor
+      resources:
+        - type: disk_free
+          arg: /
+        - type: memory_free
+        - type: processor_use
+        - type: ipv4_address
+          arg: wlan0
+        - type: last_boot
+        - type: disk_use_percent
+          arg: /
+  
+      # rpi_CPU温度
+      ###########################################
+    - platform: command_line
+      name: rpi_cpu_temp
+      command: "cat /sys/class/thermal/thermal_zone0/temp"
+      unit_of_measurement: "°C"
+      value_template: '{{ value | multiply(0.001) }}'
+  
     - platform: template
       sensors:
-        p2_price:
-          friendly_name: '電気料金概算'
-          unit_of_measurement: '円'
-          icon_template: mdi:currency-jpy
-          value_template: >-
-            {% if is_state('sensor.sonoffp2_energy_total','unknown') %}
-            0
-            {% else %}
-            {{ (states('sensor.sonoffp2_energy_total')|float * 23.408 ) | round(2) }}
-            {% endif %}
-        p1_price:
-          friendly_name: '電気料金概算'
-          unit_of_measurement: '円'
-          icon_template: mdi:currency-jpy
-          value_template: >-
-            {% if is_state('sensor.sonoffp1_energy_total','unknown') %}
-            0
-            {% else %}
-            {{ (states('sensor.sonoffp1_energy_total')|float * 23.408 ) | round(2) }}
-            {% endif %}
-
-    ###########################################
+        rpi_cpu_temp_round:
+          friendly_name: 'CPU温度'
+          value_template: "{{ '%.2f'%(states('sensor.rpi_cpu_temp') | float) }}"
+          unit_of_measurement: "°C"
+          device_class: temperature
+  
+      # rpi_電流値センサー
+      ###########################################
+    - platform: rpi_power
+      text_state: true
+  
+      # 外部IP
+      ###########################################
+    - platform: dnsip
+  
+      # hass最新ver
+      ###########################################
+    - platform: rest
+      resource: https://pypi.python.org/pypi/homeassistant/json
+      name: HA Current Version
+      value_template: '{{ value_json.info.version }}'
+  
+      # hass現ver
+      ###########################################
+    - platform: version
+      name: HA Installed Version
+  
+      # WIFI強度
+      ###########################################
+  #  - platform: command_line
+  #    name: Wifi Signal
+  #    command: 'iwconfig wlan0 |grep Signal|cut -d"=" -f3|cut -d" " -f1'
+  #    unit_of_measurement: " dBm"
+  #    value_template: '{{ value | round(1) }}'
+  
+  
     # Pi Zero から値読み出し
     ###########################################
     - platform: mqtt
@@ -267,23 +479,27 @@ sensor:
       value_template: '{{ value_json["temperature"] }}'
       unit_of_measurement: '°C'
       device_class: temperature
-#    - platform: mqtt
-#      name: 'bed_bme280_pressure'
-#      state_topic: 'tele/bed_bme280/sensor'
-#      value_template: '{{ value_json["pressure"] }}'
-#      unit_of_measurement: 'mb'
-#      icon: mdi:nature
-#      friendly_name: 'bed280 気圧'
+  #    - platform: mqtt
+  #      name: 'bed_bme280_pressure'
+  #      state_topic: 'tele/bed_bme280/sensor'
+  #      value_template: '{{ value_json["pressure"] }}'
+  #      unit_of_measurement: 'mb'
+  #      icon: mdi:nature
+  #      friendly_name: 'bed280 気圧'
 
+
+
+###########################################
+# Light
+###########################################
 light:
-    ###########################################
     # Nanoleaf Aurora操作
     ###########################################
   - platform: nanoleaf
-    name: 'オーロラ'
-    host: 192.168.3.19
+    name: 'Aurora'
+    host: 192.168.3.42
     token: !secret aurora_token
-    ###########################################
+
     # nRemoのScript呼び出し
     ###########################################
   - platform: template
@@ -291,9 +507,9 @@ light:
       living:
         friendly_name: 'リビング照明'
         turn_on:
-          service: script.light_living_on
+          service: rest_command.light_living_on
         turn_off:
-          service: script.light_living_off
+          service: rest_command.light_living_off
       dining:
         friendly_name: 'ダイニング照明'
         turn_on:
@@ -307,27 +523,27 @@ light:
         turn_off:
           service: script.light_bed_off
 
-    
-
+###########################################
+# Switch
+###########################################
 switch:
-  ###########################################
+
   # Windowsマシンのon/off
   #  wake on lanで起動して、pingで生死確認して、RPCshutdownで終了
   ###########################################
   - platform: wake_on_lan
     name: 'Red-Astray'
     host: 192.168.3.3
-    mac_address: '40-8D-5C-53-16-3A'
+    mac: '40-8D-5C-53-16-3A'
     turn_off: 
       service: script.addon_rpcshutdown_redastray
       
-  ###########################################
   # エアコンのon/offスイッチ。script経由でrest_command操作
   ###########################################
   - platform: template
     switches:
       aircon_bed:
-        value_template: "{% if states('sensor.p2_power') | float > 3 %}true{%else%}false{% endif %}"
+        value_template: "{% if states('sensor.sonoffp3_energy_power') | float > 3 %}true{%else%}false{% endif %}"
         turn_on:
           service: script.aircon_bed
         turn_off:
@@ -335,18 +551,123 @@ switch:
   - platform: template
     switches:
       aircon_living:
-        value_template: "{% if states('sensor.p1_power') | float > 3 %}true{%else%}false{% endif %}"
+        value_template: "{% if states('sensor.sonoffp1_energy_power') | float > 3 %}true{%else%}false{% endif %}"
         turn_on:
           service: script.aircon_living
         turn_off:
           service: script.aircon_living_off
 
+  - platform: switchbot
+    name: switchbot_etc
+    mac: 'e0:f4:5c:83:02:64'
+    
+  - platform: switchbot
+    name: switchbot_gate
+    mac: 'd6:50:34:58:59:d8'
+
+###########################################
+# input
+###########################################
 input_text:
-  ###########################################
   # LINE送信文
   ###########################################
   sendline:
     name: send to LINE
     min: 1
     initial: input text
+
+
+###############################################################################
+#  Binary Sensor
+###############################################################################
+binary_sensor: 
+
+# 稼働日バイナリセンサー
+###########################################
+  - platform: workday
+    name: k1_workday
+    country: JP
+  
+  - platform: workday
+    name: reina_workday
+    country: JP
+    workdays: [wed, thu, fri, sat, sun]
+    excludes: [mon, tue]
+
+  # Ping DeadorAliveバイナリセンサー
+  ###########################################
+  - platform: ping
+    host: 192.168.3.1
+    count: 4
+    name: 'Main-Router'
+    scan_interval: 180
+    
+  - platform: ping
+    host: 192.168.3.2
+    count: 4
+    name: 'Blue-Astray'
+    scan_interval: 180
+    
+  - platform: ping
+    host: 192.168.3.3
+    count: 4
+    name: 'Red-Astray'
+    scan_interval: 180
+    
+  - platform: ping
+    host: 192.168.3.4
+    count: 4
+    name: 'Gold-Astray'
+    scan_interval: 180
+    
+  - platform: ping
+    host: 192.168.3.5
+    count: 4
+    name: 'Green-Astray'
+    scan_interval: 180
+    
+  - platform: ping
+    host: 192.168.3.6
+    count: 4
+    name: 'Mirage-Astray'
+    scan_interval: 180
+    
+  - platform: ping
+    host: 192.168.3.210
+    count: 4
+    name: 'Sub-Router'
+    scan_interval: 180
+
+
+###############################################################################
+#  Media_Player
+###############################################################################
+media_player:
+
+# Bravia テレビ ※要HACS
+###########################################
+  - platform: braviatv_psk
+    host: 192.168.3.8
+    psk: sony
+    mac: A8:6B:AD:1B:EB:07
+    amp: True
+    android: True
+#    sourcefilter:
+#      - ' HD'
+#      - HDMI
+    name: braviatv
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     

@@ -10,34 +10,6 @@ addon_rpcshutdown_redastray:
       input: red-astray
 
 ###########################################
-# Home Assistant を 再起動
-###########################################
-hass_restart:
-  alias: Home Assistant 再起動
-  sequence:
-    - service: homeassistant.restart
-
-
-###########################################
-# Home Assistant を アップデート
-###########################################
-
-
-###########################################
-# ifttt経由でLINE_botに飛ばすスクリプト
-###########################################
-notify_line_mtg:
-  sequence:
-    - service: ifttt.trigger
-      data_template: {"event":"pair_line", "value1":"{{ value1 }}"}
-
-notify_line_log:
-  sequence:
-    - service: ifttt.trigger
-      data_template: {"event":"logline", "value1":"{{ value1 }}"}
-
-
-###########################################
 # nRemo APIで電灯たたくrest_command
 ###########################################
 light_living_on:

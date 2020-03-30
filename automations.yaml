@@ -1,359 +1,313 @@
-# Office出たら通知
-###########################################
-- id: 6ggmxgv5egl6
-  alias: auto_notify_k1_office1
+- id: '1582081784412'
+  alias: Turn on the Hotwater when 7:00am in everyday
+  description: 湯沸かしを出勤日の7:00に自動on
   trigger:
-  - entity_id: device_tracker.life360_k1asa
-    event: leave
-    platform: zone
-    zone: zone.osaki
-  action:
-  - data:
-      value1: kが職場から離脱
-    service: script.notify_line_mtg
-  initial_state: true
-
-# Office出たら通知
-###########################################
-- id: f2cdarb95ei4
-  alias: auto_notify_k1_office2
-  trigger:
-  - entity_id: device_tracker.life360_k1asa
-    event: leave
-    platform: zone
-    zone: zone.shonan
-  action:
-  - data:
-      value1: kが職場から離脱
-    service: script.notify_line_mtg
-  initial_state: true
-
-# Office出たら通知
-###########################################
-- id: h978qstl8p78
-  alias: auto_notify_r_office
-  trigger:
-  - entity_id: device_tracker.life360_reina
-    event: leave
-    platform: zone
-    zone: zone.nailr
-  action:
-  - data:
-      message: rが職場を離脱
-    service: notify.ios_k1_phone
-  - data:
-      value1: rが職場を離脱
-    service: script.notify_line_mtg
-  initial_state: true
-
-# 地元駅着いたら通知
-###########################################
-- id: kchc3o43cfdu
-  alias: auto_notify_k1_ikuta
-  trigger:
-  - entity_id: device_tracker.life360_k1asa
-    event: enter
-    platform: zone
-    zone: zone.ikuta
-  action:
-  - data:
-      value1: kが生田駅
-    service: script.notify_line_mtg
-  initial_state: true
-
-# 地元駅着いたら通知
-###########################################
-- id: 0qd9wxtx0un6
-  alias: auto_notify_r_ikuta
-  trigger:
-  - entity_id: device_tracker.life360_reina
-    event: enter
-    platform: zone
-    zone: zone.ikuta
-  action:
-  - data:
-      message: rが生田駅
-    service: notify.ios_k1_phone
-  - data:
-      value1: rが生田駅
-    service: script.notify_line_mtg
-  initial_state: true
-
-# 地元駅着いたら通知
-###########################################
-- id: 0qd9wxtx0un6
-  alias: auto_notify_r_ikuta
-  trigger:
-  - entity_id: device_tracker.life360_reina
-    event: enter
-    platform: zone
-    zone: zone.ikuta
-  action:
-  - data:
-      message: rが生田駅
-    service: notify.ios_k1_phone
-  - data:
-      value1: rが生田駅
-    service: script.notify_line_mtg
-  initial_state: true
-
-# 地元駅着いたら通知
-###########################################
-- id: g9ekkv7i5x5n
-  alias: auto_notify_r_kumagaya
-  trigger:
-  - entity_id: device_tracker.life360_reina
-    event: enter
-    platform: zone
-    zone: zone.kumagaya
-  action:
-  - data:
-      value1: rが熊谷駅
-    service: script.notify_line_mtg
-  initial_state: true
-
-# 帰宅したら通知
-###########################################
-- id: enwbmld9uhpi
-  alias: auto_notify_r_home
-  trigger:
-  - entity_id: device_tracker.life360_reina
-    event: enter
-    platform: zone
-    zone: zone.home
-  action:
-  - data:
-      message: rが生田帰宅
-    service: notify.ios_k1_phone
-  - data:
-      value1: rが生田帰宅
-    service: script.notify_line_mtg
-  initial_state: true
-
-# 帰宅したら通知
-###########################################
-- id: kKjOM31339au
-  alias: auto_notify_r_home_r
-  trigger:
-  - entity_id: device_tracker.life360_reina
-    event: enter
-    platform: zone
-    zone: zone.home_r
-  action:
-  - data:
-      message: rが熊谷帰宅
-    service: notify.ios_k1_phone
-  - data:
-      value1: rが熊谷帰宅
-    service: script.notify_line_mtg
-  initial_state: true
-
-# 湯沸しのON/OFFを通知
-###########################################
-- id: spgfcdgdf26a
-  alias: HotWater_autoOff
-  trigger:
-  - at: 06:30:00
+  - at: 07:00
     platform: time
   condition:
   - condition: or
     conditions:
     - condition: state
-      entity_id: device_tracker.life360_k1asa
+      entity_id: person.k1
       state: home
     - condition: state
-      entity_id: device_tracker.life360_reina
+      entity_id: person.reina
       state: home
   action:
-  - service: switch.turn_on
-    data:
-      entity_id: switch.sonoff4
-  - service: script.notify_line_log
-    data:
-      value1: 湯沸しon
-  - delay: 01:00:00
-  - service: switch.turn_off
-    data:
-      entity_id: switch.sonoff4
+  - device_id: 6a3e2984cbd448f3ac3c0fc1498aea57
+    domain: switch
+    entity_id: switch.kasa_hotwater
+    type: turn_on
   - data:
-      value1: 湯沸しoff
-    service: script.notify_line_log
-  initial_state: true
-
-# 毎月1日に積算電気代をリセット
-###########################################
-- id: ebjxrmjw0fyd
-  alias: Reset Value of total at 1st day per month
+      event: pair_line
+      value1: 湯沸かしon
+    service: ifttt.trigger
+- id: '1582083264164'
+  alias: Turn off the Hotwater when 23:00 in everyday
+  description: 毎日23時に湯沸かしをオフ
   trigger:
-  - platform: time_pattern
-    hours: '0'
-    minutes: /10
+  - at: '23:00'
+    platform: time
+  condition: []
+  action:
+  - device_id: 6a3e2984cbd448f3ac3c0fc1498aea57
+    domain: switch
+    entity_id: switch.kasa_hotwater
+    type: turn_off
+  - data:
+      event: pair_line
+      value1: 湯沸かしoff
+    service: ifttt.trigger
+- id: '1582264570294'
+  alias: notify when astrays go off
+  description: コンソールがいなくなったら通知
+  trigger:
+  - entity_id: binary_sensor.blue_astray, binary_sensor.gold_astray,binary_sensor.red_astray,
+      binary_sensor.green_astray, binary_sensor.mirage_astray, binary_sensor.main_router,
+      binary_sensor.sub_router
+    for: 00:03:00
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data_template:
+      event: log_line
+      value1: '{{ trigger.entity_id }} がオフになりました。'
+    service: ifttt.trigger
+  - delay: 00:03:00
+  - condition: template
+    value_template: '{{ is_state( trigger.entity_id, ''on'') }}'
+  - data_template:
+      event: log_line
+      value1: '{{ trigger.entity_id }} がオンになりました。'
+    service: ifttt.trigger
+- id: '1582265720791'
+  alias: Send to LINE when change txtline
+  description: フォーム内容が変わったらLINE送信
+  trigger:
+  - entity_id: input_text.sendline
+    platform: state
+  condition: []
+  action:
+  - data_template:
+      event: pair_line
+      value1: '{{ trigger.to_state.state }}'
+    service: ifttt.trigger
+- id: '1582266580931'
+  alias: Start the Casting to GoogleHub on boot
+  description: 起動時にGoogleNestに画面配信
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - delay: 00:03:00
+  - data:
+      view_path: chrome
+    entity_id: media_player.kitchen_googlehub
+    service: cast.show_lovelace_view
+- id: '1582266903318'
+  alias: Restart on every Tuesday at 04:00
+  description: 毎週火曜4時に再起動
+  trigger:
+  - at: 04:00:00
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - tue
+  action:
+  - service: homeassistant.restart
+- id: '1582267221691'
+  alias: Send command that sending GPS to ios devices
+  description: 起動時にiosにGPS送信を指示
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      message: request_location_update
+    service: notify.mobile_app_sonytabletp
+  - data:
+      message: request_location_update
+    service: notify.mobile_app_tiyanrena
+- id: '1582267383762'
+  alias: Notify when HA is online
+  description: HA起動時にLINE通知
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      event: log_line
+      value1: HA is started.
+    service: ifttt.trigger
+  - data:
+      data:
+        attachment:
+          url: https://1.bp.blogspot.com/-L0IgETW-DVQ/WGnPOQXqP6I/AAAAAAABA1k/jv1PTrTvRXcRRcDUFVc4HvYpZ_N6Ah1LgCLcB/s800/computer_note_good.png
+      message: HA is started.
+    service: notify.mobile_app_sonytabletp
+- id: '1582267883926'
+  alias: Send command that upload status to tasmotas
+  description: HA起動時にtasmotaにstatusアップロード指示
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data:
+      payload: '1'
+      topic: tasmotaps/cmnd/SetOption19
+    service: mqtt.publish
+  - data:
+      payload: '1'
+      topic: tasmotas/cmnd/SetOption19
+    service: mqtt.publish
+  - data:
+      payload: ''
+      topic: tasmotaps/cmnd/state
+    service: mqtt.publish
+  - data:
+      payload: ''
+      topic: tasmotas/cmnd/state
+    service: mqtt.publish
+- id: '1583819074259'
+  alias: Auto Notify person into spot
+  description: ''
+  trigger:
+  - entity_id: person.k1, person.reina
+    from: not_home
+    platform: state
+  condition: []
+  action:
+  - delay: 00:03:00
+  - condition: template
+    value_template: '{{ states( trigger.entity_id ) != trigger.from_state.state }}'
+  - data_template:
+      event: pair_line
+      value1: '{{ state_attr( trigger.entity_id , ''friendly_name'') }}が{{ trigger.to_state.state
+        }}へ到着'
+    service: ifttt.trigger
+- id: '1583819074323'
+  alias: Notify me person goout from spot
+  description: ''
+  trigger:
+  - entity_id: person.k1, person.reina
+    for: 00:05:00
+    platform: state
+    to: not_home
+  condition: []
+  action:
+  - condition: template
+    value_template: '{{ states( trigger.entity_id ) != trigger.from_state.state }}'
+  - data_template:
+      event: pair_line
+      value1: '{{ state_attr( trigger.entity_id , ''friendly_name'') }}が{{ trigger.from_state.state
+        }}から離脱'
+    service: ifttt.trigger
+- id: '1583826441057'
+  alias: Rest Energy counter when day1 every month
+  description: 毎月1日に積算電気代報告とカウンターリセット
+  trigger:
+  - hours: '0'
+    minutes: '0'
+    platform: time_pattern
     seconds: '0'
   condition:
-    condition: template
+  - condition: template
     value_template: '{{now().day | int == 1}}'
   action:
-  - service: mqtt.publish
-    data:
-      topic: cmnd/sonoffP1/EnergyReset3
+  - data_template:
+      event: pair_line
+      value1: リビングA/C:前月の電気代:{{ states('sensor.pliv_price') }}
+    service: ifttt.trigger
+  - data_template:
+      event: pair_line
+      value1: 寝室A/C:前月の電気代 {{ states('sensor.pbed_price') }}
+    service: ifttt.trigger
+  - data_template:
+      event: pair_line
+      value1: TV周り:前月の電気代 {{ states('sensor.ptv_price') }}
+    service: ifttt.trigger
+  - data_template:
+      event: pair_line
+      value1: パソコン:前月の電気代 {{ states('sensor.ppc_price') }}
+    service: ifttt.trigger
+  - data:
       payload: '0'
-  - service: mqtt.publish
-    data:
-      topic: cmnd/sonoffP2/EnergyReset3
-      payload: '0'
-#  - service: script.notify_line_log
-#    data_template:
-#      value1: '前月の電気代" {{ states('') }}'
-  - service: script.notify_line_log
-    data:
+      topic: tasmotaps/cmnd/EnergyReset3
+    service: mqtt.publish
+  - data:
+      event: pair_line
       value1: 電気代積算リセット実行済
-
-# 各装置のping無応答時に通知
-###########################################
-- id: bduyv2h58clh
-  alias: notify_blue_offline
+    service: ifttt.trigger
+- id: '1583974670099'
+  alias: Notify Of New External IP
+  description: 外部IP変更時に通知
   trigger:
+  - entity_id: sensor.myip
     platform: state
-    entity_id: binary_sensor.blueastray
-    from: "on"
-    to: "off"
+  condition:
+  - condition: template
+    value_template: '{% if trigger.from_state and trigger.to_state %} true {% else
+      %} false {% endif %}'
+  - condition: template
+    value_template: '{% if trigger.from_state.state == ''unknown'' %} false {% else
+      %} true {% endif %}'
+  - condition: template
+    value_template: '{% if trigger.to_state.state == ''unknown'' %} false {% else
+      %} true {% endif %}'
+  - condition: template
+    value_template: '{{ trigger.from_state.state != trigger.to_state.state }}'
+  action:
+  - data_template:
+      event: log_line
+      value1: 外部IP変更 {{ trigger.from_state.state }} → {{ trigger.to_state.state }}
+    service: ifttt.trigger
+- id: '1583974917601'
+  alias: HASSIO.core Update Available Notification
+  description: HAのアップデートがあれば通知
+  trigger:
+  - entity_id: binary_sensor.updater
+    from: 'off'
+    platform: state
+    to: 'on'
   condition: []
   action:
-  - data:
-      value1: "Blue Offline"
-    service: script.notify_line_log
-
-- id: x1941jzarowr
-  alias: notify_gold_offline
+  - data_template:
+      event: log_line
+      value1: HAにアップデート来たよ {{ state_attr( trigger.entity_id , 'newest_version') }}
+    service: ifttt.trigger
+- id: '1583976024381'
+  alias: Notify me garbage collection
+  description: ごみ収集のお知らせ
   trigger:
+  - entity_id: sensor.garbage_burnable, sensor.garbage_cans, sensor.garbage_carton,
+      sensor.garbage_metal, sensor.garbage_mixpaper, sensor.garbage_plastic
+    for: '22:00:00'
     platform: state
-    entity_id: binary_sensor.goldastray
-    from: "on"
-    to: "off"
+    to: Tomorrow
   condition: []
   action:
-  - data:
-      value1: "Gold Offline"
-    service: script.notify_line_log
-
-- id: rlaa3ggqm57s
-  alias: notify_green_offline
+  - data_template:
+      data:
+        attachment:
+          url: '{{ state_attr( trigger.entity_id , ''icon_url'') }}'
+      message: 明日は {{ state_attr( trigger.entity_id , 'friendly_name') }} の収集です。
+      title: ゴミの日
+    service: notify.notify
+  - delay: '1:00:00'
+  - data_template:
+      event: pair_line
+      value1: 明日は {{ state_attr( trigger.entity_id , 'friendly_name') }} の収集です。
+    service: ifttt.trigger
+- id: '1583981158388'
+  alias: Check-in_Doushi
+  description: Check-in when I goto 道の駅どうし
   trigger:
-    platform: state
-    entity_id: binary_sensor.greenastray
-    from: "on"
-    to: "off"
+  - entity_id: person.k1
+    event: enter
+    platform: zone
+    zone: zone.spot_doushi
   condition: []
   action:
-  - data:
-      value1: "Green Offline"
-    service: script.notify_line_log
-
-- id: 9iezmtue767l
-  alias: notify_Mirage_offline
-  trigger:
-    platform: state
-    entity_id: binary_sensor.mirageastray
-    from: "on"
-    to: "off"
-  condition: []
-  action:
-  - data:
-      value1: "Mirage Offline"
-    service: script.notify_line_log
-
-- id: hnk56cex02xh
-  alias: notify_MainRT_offline
-  trigger:
-    platform: state
-    entity_id: binary_sensor.mainrouter
-    from: "on"
-    to: "off"
-  condition: []
-  action:
-  - data:
-      value1: "MainRT Offline"
-    service: script.notify_line_log
-
-- id: i60noxozdlee
-  alias: notify_SubRT_offline
-  trigger:
-    platform: state
-    entity_id: binary_sensor.subrouter
-    from: "on"
-    to: "off"
-  condition: []
-  action:
-  - data:
-      value1: "SubRT Offline"
-    service: script.notify_line_log
-
-- id: snjbgn2i4tu7
-  initial_state: true
-  alias: txt_to_sendline
-  trigger:
-  - platform: state
-    entity_id: input_text.sendline
-  action:
-  - service: script.notify_line_mtg
-    data_template:
-      value1: '{{ trigger.to_state }}'
-
-# GPSログ
-###########################################
-- id: r5f8s0nf40gz
-  initial_state: true
-  alias: GPSlogsR_evernote
-  trigger:
-  - platform: state
-    entity_id: device_tracker.life360_reina
-  action:
-  - service: ifttt.trigger
-    data_template:
-      event: "reinalog"
-      value1: "{{ state_attr('device_tracker.life360_reina', 'latitude') }}"
-      value2: "{{ state_attr('device_tracker.life360_reina', 'longitude') }}"
-      value3: "{{ state_attr('device_tracker.life360_reina', 'gps_accuracy') }}"
-
-- id: xvrde87jakre
-  initial_state: true
-  alias: GPSlogsR_Gsheet
-  trigger:
-  - platform: state
-    entity_id: device_tracker.life360_reina
-  action:
-  - service: ifttt.trigger
-    data_template:
-      event: "reina_gps_log"
-      value1: "{{ state_attr('device_tracker.life360_reina', 'latitude') }}"
-      value2: "{{ state_attr('device_tracker.life360_reina', 'longitude') }}"
-      value3: "{{ state_attr('device_tracker.life360_reina', 'gps_accuracy') }}"
-
-
-- id: z6coo1hlfika
-  initial_state: true
-  alias: GPSlogsK_evernote
-  trigger:
-  - platform: state
-    entity_id: device_tracker.life360_k1asa
-  action:
-  - service: ifttt.trigger
-    data_template:
-      event: "k1log"
-      value1: "{{ state_attr('device_tracker.life360_k1asa', 'latitude') }}"
-      value2: "{{ state_attr('device_tracker.life360_k1asa', 'longitude') }}"
-      value3: "{{ state_attr('device_tracker.life360_k1asa', 'gps_accuracy') }}"
-
-- id: zr2x6ybb29xp
-  initial_state: true
-  alias: GPSlogsK_Gsheet
-  trigger:
-  - platform: state
-    entity_id: device_tracker.life360_k1asa
-  action:
-  - service: ifttt.trigger
-    data_template:
-      event: "k1_gps_log"
-      value1: "{{ state_attr('device_tracker.life360_k1asa', 'latitude') }}"
-      value2: "{{ state_attr('device_tracker.life360_k1asa', 'longitude') }}"
-      value3: "{{ state_attr('device_tracker.life360_k1asa', 'gps_accuracy') }}"
+  - condition: template
+    value_template: '{{ trigger.entity_id.state == trigger.to_state }}'
+  - data_template:
+      data:
+        attachment:
+          url: https://1.bp.blogspot.com/-0TEqZxyRkCM/XS_7yvtbe3I/AAAAAAABTqE/9mpjn2SbTooaC3uqN9kS9UTcPK4X9aXRgCLcBGAs/s800/bike_helmet_man.png
+      message: K1が{{ state_attr(trigger.zone, 'friendly_name') }}に到着
+      title: チェックイン
+    service: notify.notify
+  - data_template:
+      comment: 自動チェックイン
+      ll: '{{ state_attr(trigger.entity_id, ''latitude'') }},{{ state_attr(trigger.entity_id,
+        ''longitude'') }}'
+      llAcc: '{{ state_attr(trigger.entity_id, ''gps_accuracy'') }}'
+      venueid: '{{ state_attr( trigger.zone, ''swarmid'') }}'
+    service: rest_command.swarm_checkin_by_venueid

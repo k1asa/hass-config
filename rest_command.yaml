@@ -108,3 +108,13 @@ aircon_living_off:
     Authorization: !secret nature_key
   payload: button=power-off
 
+
+###########################################
+# Swarm API経由のチェックイン
+###########################################
+
+# Swarmにチェックイン
+#  venueidを指定して、comment追加してつぶやく。privateかPublicか選択
+swarm_checkin_by_venueid:
+  url: !secret swarm_checkin_template
+  method: post

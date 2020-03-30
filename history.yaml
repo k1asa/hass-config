@@ -2,96 +2,109 @@
 # 履歴機能に入れる入れないの設定 domainは種別まるごと指定 entitiesは個別指定
 ######################
 
-# Enables support for tracking state changes over time
-  use_include_order: True
-  include:
-    entities:
-      - sensor.tiyanrena_battery_state
-      - device_tracker.life360_reina
-      - sensor.tiyanrena_battery_level
-      - device_tracker.life360_k1asa
-      - sensor.sonytabletp_battery_state
-      - sensor.sonytabletp_battery_level
-      - lock.sesame_pep
-      - switch.sonoff1
-      - switch.sonoff2
-      - switch.sonoff3
-      - switch.sonoff4
-#      - light.aurora
-      - light.living
-      - light.dining
-      - light.bed
-      - binary_sensor.blueastray
-      - binary_sensor.redastray
-      - binary_sensor.greenastray
-      - binary_sensor.goldastray
-      - binary_sensor.mirageastray
-      - binary_sensor.mainrouter
-      - binary_sensor.subrouter
-      - media_player.braviatv
-      - media_player.playstation_4
-      - media_player.kitutin
-      - media_player.terebi
-      - media_player.betsudorumu
-      - media_player.kitsuchin
-      - media_player.yu_shi
-      - sensor.speedtest_upload
-      - sensor.speedtest_download
-      - sensor.p1_power
-      - sensor.p2_power
-      - sensor.p1_energy_total
-      - sensor.p2_energy_total
-      - sensor.ambient_temperature
-      - sensor.ambient_pressure
-      - sensor.ambient_humidity
-      - weather.dark_sky
-      - sensor.bed_bme280_pressure
-      - sensor.bed_bme280_temp
-      - sensor.nremo_1_hu
-      - sensor.nremo_1_il
-      - sensor.nremo_1_te
-      - sensor.nremo_0_hu
-      - sensor.nremo_0_il
-      - sensor.nremo_0_te
+use_include_order: true
+exclude:
+  domains:
+    - automation
+    - script
+    - camera
+    - group
+    - input_text
+    - device_tracker
+  entities:
+    - sun.sun
+    - binary_sensor.updater
+    - sensor.ha_installed_version
+    - sensor.ha_current_version
+    - sensor.season
+    - sensor.day_night
+    - sensor.dark_sky_uv_index
+    - sensor.dark_sky_wind_speed
+    - sensor.dark_sky_humidity
+    - sensor.dark_sky_temperature
+    - sensor.dark_sky_summary
+    - sensor.dark_sky_hourly_summary
+    - sensor.dark_sky_daily_summary
+    - sensor.hacs
+    - sensor.home_assistant_up_time
+    - sensor.speedtest_ping
+    - sensor.sonoffppc_energy_totalstarttime
+    - sensor.sonoffpbed_energy_totalstarttime
+    - sensor.sonoffpliv_energy_totalstarttime
+    - sensor.sonoffppc_energy_totalstarttime
+    - sensor.sonoffptv_energy_totalstarttime
+    - sensor.sonoffppc_energy_totalstarttime_2
+    - sensor.sonoffpbed_energy_yesterday
+    - sensor.sonoffptv_energy_yesterday
+    - sensor.sonoffppc_energy_yesterday
+    - sensor.sonoffpliv_energy_yesterday
+    - sensor.sonoffppc_energy_yesterday_2
+    - sensor.sonoffppc_energy_today
+    - sensor.sonoffpliv_energy_today
+    - sensor.sonoffpbed_energy_today
+    - sensor.sonoffptv_energy_today
+    - sensor.sonoffppc_energy_today_2
+    - sensor.sonoffppc_energy_factor
+    - sensor.sonoffpliv_energy_factor
+    - sensor.sonoffpbed_energy_factor
+    - sensor.sonoffptv_energy_factor
+    - sensor.sonoffppc_energy_factor_2
+    - sensor.sonoffppc_energy_current
+    - sensor.sonoffpliv_energy_current
+    - sensor.sonoffpbed_energy_current
+    - sensor.sonoffptv_energy_current
+    - sensor.sonoffppc_energy_current_2
+    - sensor.sonoffppc_energy_status
+    - sensor.sonoffpliv_energy_status
+    - sensor.sonoffpbed_energy_status
+    - sensor.sonoffptv_energy_status
+    - sensor.sonoffppc_energy_status_2
+    - sensor.sonoffppc_energy_reactivepower
+    - sensor.sonoffpliv_energy_reactivepower
+    - sensor.sonoffpbed_energy_reactivepower
+    - sensor.sonoffptv_energy_reactivepower
+    - sensor.sonoffppc_energy_reactivepower_2
+    - sensor.sonoffppc_energy_apparentpower
+    - sensor.sonoffpliv_energy_apparentpower
+    - sensor.sonoffpbed_energy_apparentpower
+    - sensor.sonoffptv_energy_apparentpower
+    - sensor.sonoffppc_energy_apparentpower_2
+    - sensor.sonoffppc_energy_energy_voltage
+    - sensor.sonoffpliv_energy_energy_voltage
+    - sensor.sonoffpbed_energy_energy_voltage
+    - sensor.sonoffptv_energy_energy_voltage
+    - sensor.sonoffppc_energy_energy_voltage_2
+    - binary_sensor.remote_ui
+    - binary_sensor.workday_sensor
+    - media_player.supikagurupu
+    - sensor.external_ip
+    - sensor.myip
+    - sensor.ipv4_address_wlan0
+    - sensor.garbage_burnable
+    - sensor.garbage_plastic
+    - sensor.garbage_cans
+    - sensor.garbage_mixpaper
+    - sensor.garbage_metal
+    - sensor.garbage_carton
+    - sensor.rpi_cpu_temp_round
+    - sensor.rpi_cpu_temp
+    - sensor.processor_use
+    - sensor.disk_free
+    - sensor.disk_use_percent
+    - sensor.memory_free
+    
 
-  exclude:
-    domains:
-      - automation
-      - weblink
-      - updater
-      - configurator
-      - group
-      - script
-      - sun
-      - history_graph
 
-      
-    entities:
-      - sensor.pihole_ads_blocked_today
-      - sensor.since_last_boot
-      - sensor.current_version
-      - sensor.day_night
-      - sensor.moon
-      - sensor.season_template
-      - sensor.season
-      - sensor.sunrise
-      - sensor.sunset
-      - sensor.yr_symbol
-      - sensor.last_boot
-      - sensor.uptime
-      - sensor.solar_angle
-      - sensor.connected_clients
-      - sensor.nremo_json
-      - camera.k1_map
-      - camera.ay_map
-      - sensor.speedtest_ping
-      - sensor.yweather_temperature_max
-      - sensor.yweather_condition
-      - sensor.yweather_temperature_min
-      - sensor.yweather_wind_speed
-      - sensor.p1_energy_today
-      - sensor.p1_voltage
-      - sensor.p1_current
-      - sensor.p2_energy_today
-      - sensor.p2_voltage
-      - sensor.p2_current
+
+include:
+  domains:
+    - person
+    - switch
+    - sensor
+    - binary_sensor
+    - media_player
+    - lock
+    - light
+#    entities:
+
+

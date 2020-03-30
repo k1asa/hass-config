@@ -1,30 +1,11 @@
-######################
-# 各種センサーなどのアイコンや種別変更
-######################
-
 sensor.ambient_temperature:
-  friendly_name: '室温'
-
+  friendly_name: 室温
 sensor.ambient_humidity:
   device_class: humidity
-  friendly_name: '湿度'
-sensor.yr_24hr_humidity:
-  friendly_name: '湿度'
-  device_class: humidity
-sensor.yr_now_humidity:
-  friendly_name: '湿度'
-  device_class: humidity
-
+  friendly_name: 湿度
 sensor.ambient_pressure:
   icon: mdi:nature
-  friendly_name: '気圧'
-sensor.yr_24hr_pressure:
-  icon: mdi:nature
-  friendly_name: '気圧'
-sensor.yr_now_pressure:
-  icon: mdi:nature
-  friendly_name: '気圧'
-
+  friendly_name: 気圧
 sensor.speedtest_download:
   icon: mdi:download
 sensor.speedtest_upload:
@@ -33,78 +14,203 @@ sensor.speedtest_ping:
   icon: mdi:speedometer
 sensor.connected_clients:
   icon: mdi:account-multiple
-
 sensor.current_version:
   icon: mdi:desktop-tower
-
-  
-sensor.yr_now_symbol:
-  friendly_name: '天気'
-sensor.yr_24hr_symbol:
-  friendly_name: '天気'
-sensor.yr_now_temperature:
-  friendly_name: '気温'
-sensor.yr_24hr_temperature:
-  friendly_name: '気温'
-sensor.yr_24hr_wind_speed:
-  icon: mdi:weather-windy
-  friendly_name: '風速'
-sensor.yr_now_wind_speed:
-  icon: mdi:weather-windy
-  friendly_name: '風速'
-sensor.yr_24hr_precipitation:
-  icon: mdi:cup-water
-  friendly_name: '降水量'
-sensor.yr_now_precipitation:
-  icon: mdi:cup-water
-  friendly_name: '降水量'
-
-sensor.sonytabletp_battery_level:
-  friendly_name: '電池残量'
-sensor.ayano0720_battery_level_2:
-  friendly_name: '電池残量'
-
-sensor.sonoffp1_energy_today:
-  friendly_name: '今日の積算使用量'
-sensor.sonoffp1_energy_yesterday:
-  friendly_name: '昨日の積算使用量'
-sensor.sonoffp1_energy_total:
-  friendly_name: '今月の積算使用量'
-sensor.sonoffp1_energy_power:
-  friendly_name: '瞬間消費電力'
-sensor.sonoffp1_energy_voltage:
-  friendly_name: '電圧'
-sensor.sonoffp1_energy_current:
-  friendly_name: '瞬間消費電流'
-sensor.sonoffp2_energy_today:
-  friendly_name: '今日の積算使用量'
-sensor.sonoffp2_energy_yesterday:
-  friendly_name: '昨日の積算使用量'
-sensor.sonoffp2_energy_total:
-  friendly_name: '今月の積算使用量'
-sensor.sonoffp2_energy_power:
-  friendly_name: '瞬間消費電力'
-sensor.sonoffp2_energy_voltage:
-  friendly_name: '電圧'
-sensor.sonoffp2_energy_current:
-  friendly_name: '瞬間消費電流'
-
-zone.ikuta:
-  friendly_name: '生田駅'
-zone.kumagaya:
-  friendly_name: '熊谷駅'
-zone.home_r:
-  friendly_name: '熊谷宅'
-zone.nailr:
-  friendly_name: '新百合ヶ丘オフィス'
-zone.osaki:
-  friendly_name: '大崎オフィス'
-zone.shonan:
-  friendly_name: '湘南オフィス'
-  
-group.default_view:
-  hidden: true
-group.all_scripts:
-  hidden: false
-group.all_automations:
-  hidden: false
+sensor.tasmotappc_energy_today:
+  friendly_name: 今日の積算使用量
+sensor.tasmotappc_energy_yesterday:
+  friendly_name: 昨日の積算使用量
+sensor.tasmotappc_energy_total:
+  friendly_name: 今月の積算使用量
+sensor.tasmotappc_energy_power:
+  friendly_name: 瞬間消費電力
+sensor.tasmotappc_energy_voltage:
+  friendly_name: 電圧
+sensor.tasmotappc_energy_coronavirus_current:
+  friendly_name: 瞬間消費電流
+sensor.tasmotapliv_energy_today:
+  friendly_name: 今日の積算使用量
+sensor.tasmotapliv_energy_yesterday:
+  friendly_name: 昨日の積算使用量
+sensor.tasmotapliv_energy_total:
+  friendly_name: 今月の積算使用量
+sensor.tasmotapliv_energy_power:
+  friendly_name: 瞬間消費電力
+sensor.tasmotapliv_energy_voltage:
+  friendly_name: 電圧
+sensor.tasmotapliv_energy_coronavirus_current:
+  friendly_name: 瞬間消費電流
+sensor.tasmotapbed_energy_today:
+  friendly_name: 今日の積算使用量
+sensor.tasmotapbed_energy_yesterday:
+  friendly_name: 昨日の積算使用量
+sensor.tasmotapbed_energy_total:
+  friendly_name: 今月の積算使用量
+sensor.tasmotapbed_energy_power:
+  friendly_name: 瞬間消費電力
+sensor.tasmotapbed_energy_voltage:
+  friendly_name: 電圧
+sensor.tasmotapbed_energy_coronavirus_current:
+  friendly_name: 瞬間消費電流
+sensor.tasmotaptv_energy_today:
+  friendly_name: 今日の積算使用量
+sensor.tasmotaptv_energy_yesterday:
+  friendly_name: 昨日の積算使用量
+sensor.tasmotaptv_energy_total:
+  friendly_name: 今月の積算使用量
+sensor.tasmotaptv_energy_power:
+  friendly_name: 瞬間消費電力
+sensor.tasmotaptv_energy_voltage:
+  friendly_name: 電圧
+sensor.tasmotaptv_energy_coronavirus_current:
+  friendly_name: 瞬間消費電流
+sensor.worldwide_coronavirus_confirmed:
+  friendly_name: 感染総数
+  icon: mdi:emoticon-neutral-outline
+  unit_of_measurement: 人
+sensor.worldwide_coronavirus_current:
+  friendly_name: 感染中
+  icon: mdi:emoticon-frown-outline
+  unit_of_measurement: 人
+sensor.worldwide_coronavirus_deaths:
+  friendly_name: 死亡
+  icon: mdi:emoticon-dead-outline
+  unit_of_measurement: 人
+sensor.worldwide_coronavirus_recovered:
+  friendly_name: 回復
+  icon: mdi:emoticon-happy-outline
+  unit_of_measurement: 人
+sensor.japan_coronavirus_confirmed:
+  unit_of_measurement: 人
+  icon: mdi:emoticon-neutral-outline
+sensor.japan_coronavirus_current:
+  icon: mdi:emoticon-frown-outline
+  unit_of_measurement: 人
+sensor.japan_coronavirus_deaths:
+  icon: mdi:emoticon-dead-outline
+  unit_of_measurement: 人
+sensor.japan_coronavirus_recovered:
+  icon: mdi:emoticon-happy-outline
+  unit_of_measurement: 人
+sensor.china_coronavirus_confirmed:
+  icon: mdi:emoticon-neutral-outline
+  unit_of_measurement: 人
+sensor.china_coronavirus_current:
+  icon: mdi:emoticon-frown-outline
+  unit_of_measurement: 人
+sensor.china_coronavirus_deaths:
+  icon: mdi:emoticon-dead-outline
+  unit_of_measurement: 人
+sensor.china_coronavirus_recovered:
+  icon: mdi:emoticon-happy-outline
+  unit_of_measurement: 人
+sensor.us_coronavirus_confirmed:
+  icon: mdi:emoticon-neutral-outline
+  unit_of_measurement: 人
+sensor.us_coronavirus_current:
+  icon: mdi:emoticon-frown-outline
+  unit_of_measurement: 人
+sensor.us_coronavirus_deaths:
+  icon: mdi:emoticon-dead-outline
+  unit_of_measurement: 人
+sensor.us_coronavirus_recovered:
+  icon: mdi:emoticon-happy-outline
+  unit_of_measurement: 人
+sensor.korea_south_coronavirus_confirmed:
+  icon: mdi:emoticon-neutral-outline
+  unit_of_measurement: 人
+sensor.korea_south_coronavirus_current:
+  icon: mdi:emoticon-frown-outline
+  unit_of_measurement: 人
+sensor.korea_south_coronavirus_deaths:
+  icon: mdi:emoticon-dead-outline
+  unit_of_measurement: 人
+sensor.korea_south_coronavirus_recovered:
+  icon: mdi:emoticon-happy-outline
+  unit_of_measurement: 人
+sensor.italy_coronavirus_confirmed:
+  friendly_name: 感染総数
+  icon: mdi:emoticon-neutral-outline
+  unit_of_measurement: 人
+sensor.italy_coronavirus_current:
+  friendly_name: 感染中
+  icon: mdi:emoticon-frown-outline
+  unit_of_measurement: 人
+sensor.italy_coronavirus_deaths:
+  friendly_name: 死亡
+  icon: mdi:emoticon-dead-outline
+  unit_of_measurement: 人
+sensor.italy_coronavirus_recovered:
+  friendly_name: 回復
+  icon: mdi:emoticon-happy-outline
+  unit_of_measurement: 人
+sensor.russia_coronavirus_confirmed:
+  friendly_name: 感染総数
+  icon: mdi:emoticon-neutral-outline
+  unit_of_measurement: 人
+sensor.russia_coronavirus_current:
+  friendly_name: 感染中
+  icon: mdi:emoticon-frown-outline
+  unit_of_measurement: 人
+sensor.russia_coronavirus_deaths:
+  friendly_name: 死亡
+  icon: mdi:emoticon-dead-outline
+  unit_of_measurement: 人
+sensor.russia_coronavirus_recovered:
+  friendly_name: 回復
+  icon: mdi:emoticon-happy-outline
+  unit_of_measurement: 人
+sensor.united_kingdom_coronavirus_confirmed:
+  friendly_name: 感染総数
+  icon: mdi:emoticon-neutral-outline
+  unit_of_measurement: 人
+sensor.united_kingdom_coronavirus_current:
+  friendly_name: 感染中
+  icon: mdi:emoticon-frown-outline
+  unit_of_measurement: 人
+sensor.united_kingdom_coronavirus_deaths:
+  friendly_name: 死亡
+  icon: mdi:emoticon-dead-outline
+  unit_of_measurement: 人
+sensor.united_kingdom_coronavirus_recovered:
+  friendly_name: 回復
+  icon: mdi:emoticon-happy-outline
+  unit_of_measurement: 人
+zone.spot_akarenga:
+  swarmid: 594e9121464d655bf6575720
+zone.spot_doushi:
+  swarmid: 4d97d72aa2c654816132e453
+zone.spot_enoshima:
+  swarmid: 5602407f498efa5e458bf98e
+zone.spot_italia:
+  swarmid: 4b5732aef964a5209c2a28e3
+zone.spot_katasegyoko:
+  swarmid: 4b8b2d49f964a5203a9632e3
+zone.spot_naps_kouhoku:
+  swarmid: 4b5aa739f964a52090cf28e3
+zone.spot_rico_tamasakai:
+  swarmid: 5de8015738ebee000833f659
+zone.spot_rico_kyoto:
+  swarmid: 5c77cc455bc27d0025862686
+zone.spot_rico_nagano:
+  swarmid: 5e4dfc6ab6b4880008b45ec7
+zone.spot_rico_shinonome:
+  swarmid: 4b6d2022f964a520df672ce3
+zone.spot_rico_shinyokohama:
+  swarmid: 55a9c7e2498eca475be53b28
+zone.spot_toriihara:
+  swarmid: 4b7f084bf964a520a71130e3
+zone.spot_yamanakako_panorama:
+  swarmid: 4b5e9eacf964a520259429e3
+sensor.garbage_burnable:
+  icon_url: https://4.bp.blogspot.com/-dhzr2EMIRB8/UqmPXeYqraI/AAAAAAAAbiI/sURc9w91yUs/s800/gomi_namagomi.png
+sensor.garbage_cans:
+  icon_url: https://2.bp.blogspot.com/-4epP7OwQ9Ic/W-0gme2K9TI/AAAAAAABQLU/tFjsRRHsPdQDNPX_r2fXO-TkXVWSq16wQCLcBGAs/s800/gomi_shigen_can.png
+sensor.garbage_carton:
+  icon_url: https://3.bp.blogspot.com/-m0YLitOmGm4/W-0gmkTXRCI/AAAAAAABQLY/yw-o553BZ4w-NXPhGaAqOL3ufxePnAHKACLcBGAs/s800/gomi_shigen_danbo-ru.png
+sensor.garbage_metal:
+  icon_url: https://4.bp.blogspot.com/-alC7e7gp1DU/UkJLmBanzDI/AAAAAAAAYPY/Ux-g-WkLkgc/s800/cooking_yakan_gin.png
+sensor.garbage_mixpaper:
+  icon_url: https://4.bp.blogspot.com/-Fcse-gK1rms/W-0gnc7ClUI/AAAAAAABQLk/BauuZipdVrYHuql1Wfn4KSqggsYD-YvhACLcBGAs/s800/gomi_shigen_shinbun.png
+sensor.garbage_plastic:
+  icon_url: https://4.bp.blogspot.com/-VvUOkv-mTuI/W-0gnuRaOnI/AAAAAAABQLo/NknvpukveKIbR2Q6G1Yfts95JHsIt_ISACLcBGAs/s800/gomi_shigen_tray.png
